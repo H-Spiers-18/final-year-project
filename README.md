@@ -4,7 +4,7 @@ An Empirical Study on The Effectiveness of Analytical Modelling Versus Machine L
 ## Installation instructions:
 All code for now is held in src folder
 ### Setup for Windows
-1. Enter the src directory of your project installation using cd <path to project>/src
+1. Enter the src directory of your project installation using `cd <path to project>/src`
 1. Install Jupyter using `py -m pip install jupyter`
 1. Create virtual environment folder using `py -m venv .venv`
 1. Activate your virtual environment using `cd .venv/Scripts` and then `activate.bat`. If this has worked you'll now see a (.venv) prefix in your CMD window
