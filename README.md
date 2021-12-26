@@ -1,5 +1,5 @@
 # final-year-project
-An Empirical Study on The Effectiveness of Analytical Modelling Versus Machine Learning Approaches to Software Performance Prediction
+An Empirical Study on the Effectiveness of Transferring Software Performance Prediction Machine Learning Models Between Compile-Time Configurations via Linear Transformation
 
 ## Installation instructions:
 All code for now is held in src folder
@@ -10,5 +10,5 @@ All code for now is held in src folder
 1. Use `cd ../..` to return to the src folder
 1. Install the iPython kernel so that we can use our virtual environment in Jupyter Notebook using `py -m pip install ipykernel`
 1. Add our virtual environment to the iPython kernel using `ipython kernel install --user --name=.venv`
-1. Finally run your Notebook inside of our virtual environment using `py -m jupyter notebook`
+1. Finally, run your Notebook inside our virtual environment using `py -m jupyter notebook`
 
