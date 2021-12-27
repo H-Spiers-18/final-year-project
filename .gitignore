@@ -1,6 +1,9 @@
 # Virtual environment
 .venv
 
+# Dataset
+dataset
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -17,6 +20,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+.idea/
 lib/
 lib64/
 parts/
