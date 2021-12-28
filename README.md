@@ -6,7 +6,7 @@ Compile-Time Configurations via Linear Transformation
 Note: All code is held in src folder
 
 ### Setup for Windows
-1. Begin at the project root
+1. Begin in the project root directory
 2. Install Jupyter using `py -m pip install jupyter`
 3. Create virtual environment folder using `py -m venv .venv`
 4. Activate your virtual environment using `cd .venv/Scripts` and then `activate.bat`. If this has worked you'll now see 
