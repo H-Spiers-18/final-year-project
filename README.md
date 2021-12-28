@@ -1,15 +1,20 @@
 # final-year-project
-An Empirical Study on the Effectiveness of Transferring Software Performance Prediction Machine Learning Models Between Compile-Time Configurations via Linear Transformation
+An Empirical Study on the Effectiveness of Transferring Software Performance Prediction Machine Learning Models Between 
+Compile-Time Configurations via Linear Transformation
 
 ## Installation instructions:
-All code for now is held in src folder
+Note: All code is held in src folder
+
 ### Setup for Windows
-1. Enter the src directory of your project installation using `cd <path to project>/src`
-1. Install Jupyter using `py -m pip install jupyter`
-1. Create virtual environment folder using `py -m venv .venv`
-1. Activate your virtual environment using `cd .venv/Scripts` and then `activate.bat`. If this has worked you'll now see a (.venv) prefix in your CMD window
-1. Use `cd ../..` to return to the src folder
-1. Install the iPython kernel so that we can use our virtual environment in Jupyter Notebook using `py -m pip install ipykernel`
-1. Add our virtual environment to the iPython kernel using `ipython kernel install --user --name=.venv`
-1. Finally, run your Notebook inside our virtual environment using `py -m jupyter notebook`
+1. Begin at the project root
+2. Install Jupyter using `py -m pip install jupyter`
+3. Create virtual environment folder using `py -m venv .venv`
+4. Activate your virtual environment using `cd .venv/Scripts` and then `activate.bat`. If this has worked you'll now see 
+a (.venv) prefix in your CMD window
+5. Use `cd ../../src` to enter the src folder
+6. Install all dependencies for the project using `pip install -r requirements.txt`
+7. Add our virtual environment to the iPython kernel using `ipython kernel install --user --name=.venv`
+8. Finally, run your Notebook inside our virtual environment using `py -m jupyter notebook`
+
+Further instructions on how to run the code can be found in src/README.md
 
