@@ -16,3 +16,7 @@ the software system (E.G. for nodejs, buffer1.csv is related to the script buffe
 files are tables of raw data; each line is a run-time configuration, coming with the performance properties measured on 
 the system e.g. for nodejs, `jitless`, `experimental-wasm-modules` and `experimental-vm-modules` are three different 
 configuration options, while `ops` is a performance property
+
+### Credit
+
+Credit for this dataset goes to https://github.com/llesoil/ctime_opt
