@@ -1,3 +1,4 @@
+from sklearn.model_selection import train_test_split
 import pandas as pd
 
 
@@ -14,3 +15,7 @@ class Dataset:
 
     def get_dataset(self):
         return self.dataset
+
+    def split_dataset(self, prepped_dataset):
+        return train_test_split(prepped_dataset)
+
