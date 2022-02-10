@@ -43,5 +43,5 @@ class Dataset:
 
     @staticmethod
     def get_split_dataset(xs, ys, test_size=0.2):
-        return train_test_split(xs, ys, test_size=test_size)
+        return train_test_split(xs, ys, test_size=test_size, shuffle=True)
 
