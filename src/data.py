@@ -88,7 +88,7 @@ class Dataset:
         -------
         X_train: numpy.ndarray - array of training sample feature vectors
         X_test: numpy.ndarray - array of test sample feature vectors
-        y_train: numpy.ndarray - array of training sample performance values
+        y_train: numpy.ndarray - array of measured training sample performance values
         y_test: numpy.ndarray - array of test sample performance values
         """
         return train_test_split(xs, ys, test_size=test_size, shuffle=True)
