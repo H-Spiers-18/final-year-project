@@ -13,3 +13,21 @@ class Learner(ABC):
     @abstractmethod
     def predict(self):
         pass
+
+
+class PredictorLearner(Learner):
+
+    def fit(self):
+        pass
+
+    def predict(self):
+        pass
+
+
+class TransferLearner(Learner):
+
+    def fit(self):
+        pass
+
+    def predict(self):
+        pass
