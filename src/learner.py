@@ -9,6 +9,7 @@ from time import time
 
 
 class InvalidAccuracyMeasureException(Exception):
+    """Custom exception for when an accuracy measure parameter other than 'mse' or 'mape' is passed to get_accuracy()"""
     pass
 
 
@@ -52,15 +53,33 @@ class Learner(ABC):
 
     @staticmethod
     def get_accuracy(y_test, y_pred, measure='mape'):
+        """
+        Calculate the accuracy of the machine learning model using either MSE or MAPE
+        Parameters
+        ----------
+        y_test: numpy.ndarray - array of test sample performance values
+        y_pred: numpy.ndarray - array of predicted performance values
+        measure: str - defines which error function to use (possible values are 'mape' and 'mse')
+
+        Returns
+        -------
+        numpy.ndarray - contains the measured error of each input prediction value
+        """
         measure = measure.upper()
         if measure == 'MAPE':
-            return mape(y_test, y_pred)
+            return mape(y_test, y_pred)*100
         elif measure == 'MSE':
             return mse(y_test, y_pred)
         else:
             raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
 
     def get_training_time(self):
+        """
+        Gets time taken to train the model
+        Returns
+        -------
+        float - time taken in seconds to train model
+        """
         return self.training_time*1000
 
 
