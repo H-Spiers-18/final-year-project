@@ -1,6 +1,14 @@
 from abc import ABC, abstractmethod
 
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_percentage_error as mape
+from sklearn.metrics import mean_squared_error as mse
+
+import constants
+
+
+class InvalidAccuracyMeasureException(Exception):
+    pass
 
 
 class Learner(ABC):
@@ -16,6 +24,16 @@ class Learner(ABC):
     @abstractmethod
     def predict(self, x_test):
         pass
+
+    @staticmethod
+    def get_accuracy(self, y_test, y_pred, measure='mape'):
+        measure = measure.upper()
+        if measure == 'MAPE':
+            return mape(y_test, y_pred)
+        elif measure == 'MSE':
+            return mse(y_test, y_pred)
+        else:
+            raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
 
 
 class PredictorLearner(Learner):
