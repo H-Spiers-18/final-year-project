@@ -5,6 +5,7 @@ from sklearn.metrics import mean_absolute_percentage_error as mape
 from sklearn.metrics import mean_squared_error as mse
 
 import constants
+from time import time
 
 
 class InvalidAccuracyMeasureException(Exception):
@@ -15,6 +16,7 @@ class Learner(ABC):
 
     def __init__(self):
         self.model = None
+        self.training_time = 0
         super().__init__()
 
     @abstractmethod
@@ -26,7 +28,7 @@ class Learner(ABC):
         pass
 
     @staticmethod
-    def get_accuracy(self, y_test, y_pred, measure='mape'):
+    def get_accuracy(y_test, y_pred, measure='mape'):
         measure = measure.upper()
         if measure == 'MAPE':
             return mape(y_test, y_pred)
@@ -35,6 +37,9 @@ class Learner(ABC):
         else:
             raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
 
+    def get_training_time(self):
+        return self.training_time*1000
+
 
 class PredictorLearner(Learner):
 
@@ -42,8 +47,10 @@ class PredictorLearner(Learner):
         super().__init__()
 
     def fit(self, x_train, y_train):
+        start_time = time()
         self.model = DecisionTreeRegressor(random_state=20)
         self.model.fit(x_train, y_train)
+        self.training_time = time()-start_time
 
     def predict(self, x_test):
         y_test = self.model.predict(x_test)
