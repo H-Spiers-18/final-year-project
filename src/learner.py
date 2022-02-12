@@ -121,7 +121,7 @@ class TransferLearner(Learner):
 
     def fit(self, x_train, y_train):
         """
-        Implements abstract method fit(). Fits data using a regression tree. For more info, see Learner.fit
+        Implements abstract method fit(). Fits data using linear regression. For more info, see Learner.fit
         Returns
         -------
         None
