@@ -18,6 +18,23 @@ class NFPropertyBoundaryIndexes(Enum):
 
 
 def get_transfer_dataset(xs1, ys1, xs2, ys2):
+    """
+    Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
+    Parameters
+    ----------
+    xs1: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
+    ys1: numpy.ndarray - 1D array of performance values for source compile-time configuration
+    xs2: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for target compile-time configuration
+    ys2: numpy.ndarray - 1D array of performance values for target compile-time configuration
+
+    Returns
+    -------
+    A training set (X_train, y_train) and a test set (X_test, y_test)
+    X_train: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
+    X_test: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
+    y_train: numpy.ndarray - 1D array of performance values for target compile-time configuration
+    y_test: numpy.ndarray - 1D array of performance values for target compile-time configuration
+    """
     _, _, X_train, X_test = Dataset.get_split_dataset(xs1, ys1)
     _, _, y_train, y_test = Dataset.get_split_dataset(xs2, ys2)
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
