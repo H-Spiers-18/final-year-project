@@ -3,6 +3,7 @@ from enum import Enum
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
+import numpy as np
 
 import constants
 
@@ -14,6 +15,34 @@ class NFPropertyBoundaryIndexes(Enum):
     POPPLER = constants.POPPLER_NF_BOUNDARY
     X264 = constants.X264_NF_BOUNDARY
     XZ = constants.XZ_NF_BOUNDARY
+
+
+def get_split_dataset(xs, ys, test_size=0.2):
+    """
+    Splits dataset into training and test set
+    Parameters
+    ----------
+    xs: numpy.ndarray - array of prepared feature vectors for all input samples
+    ys: numpy.ndarray - array of performance values for all input samples
+    test_size: float - portion of dataset to assign as the test set. range between 0-1
+
+    Returns
+    -------
+    X_train: numpy.ndarray - array of training sample feature vectors
+    X_test: numpy.ndarray - array of test sample feature vectors
+    y_train: numpy.ndarray - array of measured training sample performance values
+    y_test: numpy.ndarray - array of test sample performance values
+    """
+    return train_test_split(xs, ys, test_size=test_size, shuffle=True)
+
+
+def get_transfer_dataset(xs1, ys1, xs2, ys2):
+    _, _, X_train, X_test = get_split_dataset(xs1, ys1)
+    _, _, y_train, y_test = get_split_dataset(xs2, ys2)
+    X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
+    X_test = np.array(list(map(lambda x: np.array([x]), X_test)))
+
+    return X_train, X_test, y_train, y_test
 
 
 class Dataset:
@@ -73,23 +102,3 @@ class Dataset:
         ys = self.dataset[cols[-1]].to_numpy()
 
         return xs, ys
-
-    @staticmethod
-    def get_split_dataset(xs, ys, test_size=0.2):
-        """
-        Splits dataset into training and test set
-        Parameters
-        ----------
-        xs: numpy.ndarray - array of prepared feature vectors for all input samples
-        ys: numpy.ndarray - array of performance values for all input samples
-        test_size: float - portion of dataset to assign as the test set. range between 0-1
-
-        Returns
-        -------
-        X_train: numpy.ndarray - array of training sample feature vectors
-        X_test: numpy.ndarray - array of test sample feature vectors
-        y_train: numpy.ndarray - array of measured training sample performance values
-        y_test: numpy.ndarray - array of test sample performance values
-        """
-        return train_test_split(xs, ys, test_size=test_size, shuffle=True)
-
