@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_absolute_percentage_error as mape
 from sklearn.metrics import mean_squared_error as mse
-from scipy.stats import wilcoxon
 
 import constants
 from time import time
@@ -82,24 +81,6 @@ class Learner(ABC):
         float - time taken in seconds to train model
         """
         return self.training_time*1000
-
-    @staticmethod
-    def get_wilcoxon_p_value(s1, s2):
-        """
-        Performs the Wilcoxon test to determine whether the difference between the test and predicted values
-        is statistically significant
-        Parameters
-        ----------
-        s1: numpy.ndarray - array of prediction values supporting the null hypothesis
-        s2: numpy.ndarray - array of prediction values supporting the alternative hypothesis
-
-        Returns
-        -------
-        p: float - p-value used to quantify the difference between y_test and y_pred. if the value is <= 0.05 then
-                   we can consider the difference to be statistically significant
-        """
-        _, p = wilcoxon(s1, s2)
-        return p
 
 
 class PredictorLearner(Learner):
