@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_percentage_error as mape
 from sklearn.metrics import mean_squared_error as mse
 
@@ -126,7 +127,10 @@ class TransferLearner(Learner):
         -------
         None
         """
-        pass
+        start_time = time()
+        self.model = LinearRegression(positive=True, fit_intercept=False)
+        self.model.fit(x_train, y_train)
+        self.training_time = time() - start_time
 
     def predict(self, x_test):
         """
@@ -137,4 +141,5 @@ class TransferLearner(Learner):
         -------
         y_pred: numpy.ndarray - predicted performance values for each of the input samples
         """
-        pass
+        y_pred = self.model.predict(x_test)
+        return y_pred
