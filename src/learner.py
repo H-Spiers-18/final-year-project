@@ -53,7 +53,7 @@ class Learner(ABC):
         pass
 
     @staticmethod
-    def get_accuracy(y_test, y_pred, measure='mape'):
+    def get_error(y_test, y_pred, measure='mape'):
         """
         Calculate the accuracy of the machine learning model using either MSE or MAPE
         Parameters
