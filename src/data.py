@@ -33,7 +33,7 @@ def get_split_dataset(xs, ys, test_size=0.2):
     y_train: numpy.ndarray - array of measured training sample performance values
     y_test: numpy.ndarray - array of test sample performance values
     """
-    return train_test_split(xs, ys, test_size=test_size, shuffle=True)
+    return train_test_split(xs, ys, test_size=test_size, random_state=42)
 
 
 def get_transfer_dataset(xs1, ys1, xs2, ys2):
