@@ -17,7 +17,7 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
-def get_transfer_dataset(xs1, ys1, xs2, ys2):
+def get_transfer_dataset(xs1, ys1, xs2, ys2, random_state=42):
     """
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
     Parameters
@@ -35,8 +35,8 @@ def get_transfer_dataset(xs1, ys1, xs2, ys2):
     y_train: numpy.ndarray - 1D array of performance values for target compile-time configuration
     y_test: numpy.ndarray - 1D array of performance values for target compile-time configuration
     """
-    _, _, X_train, X_test = Dataset.get_split_dataset(xs1, ys1)
-    _, _, y_train, y_test = Dataset.get_split_dataset(xs2, ys2)
+    _, _, X_train, X_test = Dataset.get_split_dataset(xs1, ys1, random_state=random_state)
+    _, _, y_train, y_test = Dataset.get_split_dataset(xs2, ys2, random_state=random_state)
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
     X_test = np.array(list(map(lambda x: np.array([x]), X_test)))
 
@@ -102,7 +102,7 @@ class Dataset:
         return xs, ys
 
     @staticmethod
-    def get_split_dataset(xs, ys, test_size=0.2):
+    def get_split_dataset(xs, ys, test_size=0.2, random_state=42):
         """
         Splits dataset into training and test set
         Parameters
@@ -118,4 +118,4 @@ class Dataset:
         y_train: numpy.ndarray - array of measured training sample performance values
         y_test: numpy.ndarray - array of test sample performance values
         """
-        return train_test_split(xs, ys, test_size=test_size, random_state=42)
+        return train_test_split(xs, ys, test_size=test_size, random_state=random_state)
