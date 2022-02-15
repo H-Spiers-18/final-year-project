@@ -128,7 +128,7 @@ class TransferLearner(Learner):
         None
         """
         start_time = time()
-        self.model = LinearRegression(positive=True, fit_intercept=False)
+        self.model = LinearRegression()
         self.model.fit(x_train, y_train)
         self.training_time = time() - start_time
 
