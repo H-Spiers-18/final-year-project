@@ -121,7 +121,11 @@ class PredictorLearner(Learner):
         return y_pred
 
     def get_optimal_params(self, X_validate, y_validate):
-        pass
+        param_grid = constants.REGRESSION_TREE_PARAM_GRID
+        temp_model = DecisionTreeRegressor()
+        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
+        cv.fit(X_validate, y_validate)
+        return cv.best_estimator_
 
 
 class TransferLearner(Learner):
