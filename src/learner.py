@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_percentage_error as mape
@@ -50,6 +51,10 @@ class Learner(ABC):
         -------
         None
         """
+        pass
+
+    @abstractmethod
+    def get_optimal_params(self, X_validate, y_validate):
         pass
 
     @staticmethod
@@ -115,6 +120,9 @@ class PredictorLearner(Learner):
         y_pred = self.model.predict(x_test)
         return y_pred
 
+    def get_optimal_params(self, X_validate, y_validate):
+        pass
+
 
 class TransferLearner(Learner):
     """Class for training and using a model for transferring run-time configurations between compile-time configurations
@@ -143,3 +151,6 @@ class TransferLearner(Learner):
         """
         y_pred = self.model.predict(x_test)
         return y_pred
+
+    def get_optimal_params(self, X_validate, y_validate):
+        pass
