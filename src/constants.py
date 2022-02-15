@@ -12,14 +12,14 @@ INVALID_ACCURACY_MEASURE_MSG = 'Invalid accuracy measure parameter. Available me
 
 # hyperparameter grids
 
-MAX_DEPTH = list(range(3,50)) + [None]
-MIN_SAMPLES_SPLIT = list(range(2,10))
-MIN_WEIGHT_FRACTION_LEAF = [x*0.1 for x in range(0,5)]
+MAX_DEPTH = list(range(3, 50)) + [None]
+MIN_SAMPLES_SPLIT = list(range(2, 10))
+MIN_WEIGHT_FRACTION_LEAF = [x*0.1 for x in range(0, 5)]
 MAX_FEATURES = ['auto', 'sqrt', 'log2']
-MAX_LEAF_NODES = list(range(3,50)) + [None]
+MAX_LEAF_NODES = list(range(3, 50)) + [None]
 
-REGRESSION_TREE_PARAM_GRID = {'max_depth': MAX_DEPTH}
-                              #'min_samples_split': MIN_SAMPLES_SPLIT,
-                              #'min_weight_fraction_leaf': MIN_WEIGHT_FRACTION_LEAF,
-                              #'max_features': MAX_FEATURES,
-                              #'max_leaf_nodes': MAX_LEAF_NODES}
+REGRESSION_TREE_PARAM_GRID = {'max_depth': MAX_DEPTH,
+                              'min_samples_split': MIN_SAMPLES_SPLIT,
+                              'min_weight_fraction_leaf': MIN_WEIGHT_FRACTION_LEAF,
+                              'max_features': MAX_FEATURES,
+                              'max_leaf_nodes': MAX_LEAF_NODES}
