@@ -125,7 +125,7 @@ class PredictorLearner(Learner):
         temp_model = DecisionTreeRegressor()
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
-        return cv.best_estimator_
+        return cv.best_estimator_, max(cv.cv_results_['mean_test_score'])*-100
 
 
 class TransferLearner(Learner):
