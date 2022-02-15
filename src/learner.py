@@ -42,7 +42,8 @@ class Learner(ABC):
     @abstractmethod
     def predict(self, x_test):
         """
-        Predicts the performance value of one or more run-time configurations
+        Predicts the performance value of one or more run-time configurations. Implemented in PredictorLearner and
+        TransferLearner
         Parameters
         ----------
         x_test: numpy.ndarray - array of test sample feature vectors
@@ -55,6 +56,18 @@ class Learner(ABC):
 
     @abstractmethod
     def get_optimal_params(self, X_validate, y_validate):
+        """
+        Perform a grid search of all possible hyperparameter configurations with 5-fold cross validation and MAPE
+        to find the best performing hyperparameter set. Implemented in PredictorLearner and TransferLearner
+        Parameters
+        ----------
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_validate: numpy.ndarray - array of validation set measured performance values
+
+        Returns
+        -------
+        None
+        """
         pass
 
     @staticmethod
@@ -98,7 +111,7 @@ class PredictorLearner(Learner):
 
     def fit(self, x_train, y_train):
         """
-        Implements abstract method fit(). Fits data using a regression tree. For more info, see Learner.fit
+        Implements abstract method. Fits data using a regression tree. For more info, see Learner.fit
         Returns
         -------
         None
@@ -110,7 +123,7 @@ class PredictorLearner(Learner):
 
     def predict(self, x_test):
         """
-        Implements abstract method predict(). Predicts the performance value of one or more run-time configurations.
+        Implements abstract method. Predicts the performance value of one or more run-time configurations.
         For more info, see learner.predict
 
         Returns
@@ -121,6 +134,20 @@ class PredictorLearner(Learner):
         return y_pred
 
     def get_optimal_params(self, X_validate, y_validate):
+        """
+        Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
+        5-fold cross validation and MAPE to find the best performing hyperparameter set.
+        Parameters
+        ----------
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_validate: numpy.ndarray - array of validation set measured performance values
+
+        Returns
+        -------
+        2-tuple containing:
+        DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
+        float - MAPE score of best performing configuration
+        """
         param_grid = constants.REGRESSION_TREE_PARAM_GRID
         temp_model = DecisionTreeRegressor()
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
@@ -157,4 +184,18 @@ class TransferLearner(Learner):
         return y_pred
 
     def get_optimal_params(self, X_validate, y_validate):
+        """
+        Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
+        5-fold cross validation and MAPE to find the best performing hyperparameter set.
+        Parameters
+        ----------
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_validate: numpy.ndarray - array of validation set measured performance values
+
+        Returns
+        -------
+        2-tuple containing:
+        DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
+        float - MAPE score of best performing configuration
+        """
         pass
