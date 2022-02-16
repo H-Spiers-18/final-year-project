@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from time import time
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
@@ -7,7 +8,6 @@ from sklearn.metrics import mean_absolute_percentage_error as mape
 from sklearn.metrics import mean_squared_error as mse
 
 import constants
-from time import time
 
 
 class InvalidAccuracyMeasureException(Exception):
