@@ -83,8 +83,8 @@ class Learner(ABC):
         Calculate the accuracy of the machine learning model using either MSE or MAPE
         Parameters
         ----------
-        y_test: numpy.ndarray - array of test sample performance values
-        y_pred: numpy.ndarray - array of predicted performance values
+        xs: numpy.ndarray - 2D array (shape (N,1)) of training feature vectors
+        ys: numpy.ndarray - 1D array of performance values for target compile-time configuration
         measure: str - defines which error function to use (possible values are 'mape' and 'mse')
 
         Returns
