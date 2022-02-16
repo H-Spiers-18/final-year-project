@@ -118,7 +118,10 @@ class PredictorLearner(Learner):
         None
         """
         start_time = time()
-        self.model = DecisionTreeRegressor(random_state=20)
+        if premade_model is not None:
+            self.model = premade_model
+        else:
+            self.model = DecisionTreeRegressor()
         self.model.fit(x_train, y_train)
         self.training_time = time()-start_time
 
@@ -168,7 +171,10 @@ class TransferLearner(Learner):
         None
         """
         start_time = time()
-        self.model = LinearRegression()
+        if premade_model is not None:
+            self.model = premade_model
+        else:
+            self.model = LinearRegression()
         self.model.fit(x_train, y_train)
         self.training_time = time() - start_time
 
