@@ -113,9 +113,9 @@ class Dataset:
 
         Returns
         -------
-        X_train: numpy.ndarray - array of training sample feature vectors
-        X_test: numpy.ndarray - array of test sample feature vectors
-        y_train: numpy.ndarray - array of measured training sample performance values
-        y_test: numpy.ndarray - array of test sample performance values
+        X_train: numpy.ndarray - array of training set feature vectors
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_train: numpy.ndarray - array of measured training set performance values
+        y_validate: numpy.ndarray - array of measured validation set performance values
         """
         return train_test_split(xs, ys, test_size=test_size, random_state=random_state)
