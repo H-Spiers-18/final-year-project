@@ -24,7 +24,7 @@ class Learner(ABC):
         super().__init__()
 
     @abstractmethod
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train, premade_model=None):
         """
         Trains a machine learning model given one or more input samples and expected outcomes
         Implemented in PredictorLearner and TransferLearner
@@ -32,6 +32,7 @@ class Learner(ABC):
         ----------
         x_train: numpy.ndarray - array of training sample feature vectors
         y_train: numpy.ndarray - array of measured training sample performance values
+        premade_model: sklearn model - Optional parameter for an optimised model defined using cross validation
 
         Returns
         -------
@@ -109,7 +110,7 @@ class PredictorLearner(Learner):
     def __init__(self):
         super().__init__()
 
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train, premade_model=None):
         """
         Implements abstract method. Fits data using a regression tree. For more info, see Learner.fit
         Returns
@@ -159,7 +160,7 @@ class TransferLearner(Learner):
     """Class for training and using a model for transferring run-time configurations between compile-time configurations
      using a linear regression learner. Implements abstract class Learner"""
 
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train, premade_model=None):
         """
         Implements abstract method fit(). Fits data using linear regression. For more info, see Learner.fit
         Returns
