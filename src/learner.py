@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from time import time
+from enum import Enum
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
@@ -12,6 +13,13 @@ import constants
 class InvalidAccuracyMeasureException(Exception):
     """Custom exception for when an accuracy measure parameter other than 'mse' or 'mape' is passed to get_accuracy()"""
     pass
+
+
+class CrossValScoringMethods(Enum):
+    """Used to access the non-functional property boundary indexes for each subject system's dataset
+    (i.e. which column number does the configuration options stop and the non-functional property measurements begin)"""
+    MAPE = constants.MAPE_SCORING
+    MSE = constants.MSE_SCORING
 
 
 class Learner(ABC):
@@ -83,7 +91,8 @@ class Learner(ABC):
         -------
         numpy.ndarray - contains the measured error of each input prediction value
         """
-        return cross_val_score(self.model, xs, ys, cv=5, scoring='neg_mean_absolute_percentage_error')
+        measure = measure.upper()
+        return cross_val_score(self.model, xs, ys, cv=5, scoring=CrossValScoringMethods[measure].value)
 
     def get_training_time(self):
         """
