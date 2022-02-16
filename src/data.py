@@ -38,8 +38,11 @@ def get_transfer_dataset(xs_source, ys_source, xs_target, ys_target, random_stat
     y_train: numpy.ndarray - 1D array of performance values for target compile-time configuration
     y_validate: numpy.ndarray - 1D array of performance values for target compile-time configuration
     """
+    # split both datasets. we ignore the first 2 values since we only want the performance values for our transfer model
     _, _, X_train, X_validate = Dataset.get_split_dataset(xs_source, ys_source, random_state=random_state)
     _, _, y_train, y_validate = Dataset.get_split_dataset(xs_target, ys_target, random_state=random_state)
+    # convert the source configuration performance values from shape (N) to (N,1) since that's the shape sklearn wants
+    # from feature vectors regardless of their dimensionality
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
     X_validate = np.array(list(map(lambda x: np.array([x]), X_validate)))
 
@@ -93,13 +96,20 @@ class Dataset:
         ys: numpy.ndarray - array of performance values for all input samples
         """
         le = LabelEncoder()
+        # grab column names from dataset csv
         cols = self.dataset.columns.values
+        # grab the column index at which the configuration options stop and the non-functional property values begin
         nf_boundary = NFPropertyBoundaryIndexes[subject_system.upper()].value
 
+        # change feature values of type str to a numbered value so that our regression approaches can use them
+        # each str is mapped to a single int
         for col in cols[1:nf_boundary]:
             self.dataset[col] = le.fit_transform(self.dataset[col].to_numpy())
 
+        # split our dataset into feature vectors and measured performance values
+        # skip the first item since that's just the index of the run-time configuration
         xs = self.dataset[cols[1:nf_boundary]].to_numpy()
+        # grab the performance value
         ys = self.dataset[cols[-1]].to_numpy()
 
         return xs, ys
