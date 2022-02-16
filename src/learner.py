@@ -91,7 +91,7 @@ class Learner(ABC):
         -------
         numpy.ndarray - contains the measured error of each input prediction value
         """
-        measure = measure.upper()
+        measure = measure.upper() # convert measure to upper to ensure it matches CrossValScoringMethods key
         return cross_val_score(self.model, xs, ys, cv=5, scoring=CrossValScoringMethods[measure].value)
 
     def get_training_time(self):
@@ -119,10 +119,12 @@ class PredictorLearner(Learner):
         None
         """
         start_time = time()
+        # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
         else:
             self.model = DecisionTreeRegressor()
+        # train the model
         self.model.fit(x_train, y_train)
         self.training_time = time()-start_time
 
@@ -155,8 +157,10 @@ class PredictorLearner(Learner):
         """
         param_grid = constants.REGRESSION_TREE_PARAM_GRID
         temp_model = DecisionTreeRegressor()
+        # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
+        # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
 
 
@@ -172,10 +176,12 @@ class TransferLearner(Learner):
         None
         """
         start_time = time()
+        # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
         else:
             self.model = LinearRegression()
+        # train the model
         self.model.fit(x_train, y_train)
         self.training_time = time() - start_time
 
@@ -208,6 +214,8 @@ class TransferLearner(Learner):
         """
         param_grid = constants.LINEAR_REGRESSION_PARAM_GRID
         temp_model = LinearRegression()
+        # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
+        # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
