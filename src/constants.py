@@ -6,11 +6,16 @@ POPPLER_NF_BOUNDARY = -2
 X264_NF_BOUNDARY = -5
 XZ_NF_BOUNDARY = -2
 
+# Sklearn scoring parameters to convert from my names for scoring techniques to sklearn's
+
+MAPE_SCORING = 'neg_mean_absolute_percentage_error'
+MSE_SCORING = 'neg_mean_squared_error'
+
 # Exception messages
 
 INVALID_ACCURACY_MEASURE_MSG = 'Invalid accuracy measure parameter. Available measures are \'MSE\' and \'MAPE\''
 
-# hyperparameter grids
+# Hyperparameter grids
 
 MAX_DEPTH = list(range(3, 50)) + [None]
 MIN_SAMPLES_SPLIT = list(range(2, 10))

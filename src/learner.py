@@ -1,18 +1,25 @@
 from abc import ABC, abstractmethod
+from time import time
+from enum import Enum
 
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_percentage_error as mape
-from sklearn.metrics import mean_squared_error as mse
 
 import constants
-from time import time
 
 
 class InvalidAccuracyMeasureException(Exception):
     """Custom exception for when an accuracy measure parameter other than 'mse' or 'mape' is passed to get_accuracy()"""
     pass
+
+
+class CrossValScoringMethods(Enum):
+    """Used to access the non-functional property boundary indexes for each subject system's dataset
+    (i.e. which column number does the configuration options stop and the non-functional property measurements begin)"""
+    MAPE = constants.MAPE_SCORING
+    MSE = constants.MSE_SCORING
 
 
 class Learner(ABC):
@@ -71,14 +78,13 @@ class Learner(ABC):
         """
         pass
 
-    @staticmethod
-    def get_error(y_test, y_pred, measure='mape'):
+    def get_error(self, xs, ys, measure='mape'):
         """
         Calculate the accuracy of the machine learning model using either MSE or MAPE
         Parameters
         ----------
-        y_test: numpy.ndarray - array of test sample performance values
-        y_pred: numpy.ndarray - array of predicted performance values
+        xs: numpy.ndarray - 2D array (shape (N,1)) of training feature vectors
+        ys: numpy.ndarray - 1D array of performance values for target compile-time configuration
         measure: str - defines which error function to use (possible values are 'mape' and 'mse')
 
         Returns
@@ -86,12 +92,7 @@ class Learner(ABC):
         numpy.ndarray - contains the measured error of each input prediction value
         """
         measure = measure.upper()
-        if measure == 'MAPE':
-            return mape(y_test, y_pred)*100
-        elif measure == 'MSE':
-            return mse(y_test, y_pred)
-        else:
-            raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
+        return cross_val_score(self.model, xs, ys, cv=5, scoring=CrossValScoringMethods[measure].value)
 
     def get_training_time(self):
         """

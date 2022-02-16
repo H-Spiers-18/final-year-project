@@ -17,30 +17,33 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
-def get_transfer_dataset(xs1, ys1, xs2, ys2, random_state=42):
+def get_transfer_dataset(xs_source, ys_source, xs_target, ys_target, random_state=42):
     """
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
     Parameters
     ----------
-    xs1: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
-    ys1: numpy.ndarray - 1D array of performance values for source compile-time configuration
-    xs2: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for target compile-time configuration
-    ys2: numpy.ndarray - 1D array of performance values for target compile-time configuration
+    xs_source: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time
+                               configuration
+    ys_source: numpy.ndarray - 1D array of performance values for source compile-time configuration
+    xs_target: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for target compile-time
+                               configuration
+    ys_target: numpy.ndarray - 1D array of performance values for target compile-time configuration
 
     Returns
     -------
-    A training set (X_train, y_train) and a test set (X_test, y_test)
+    A training set (X_train, y_train) and a validation set (X_validate, y_validate)
     X_train: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
-    X_test: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
+    X_validate: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time
+                                configuration
     y_train: numpy.ndarray - 1D array of performance values for target compile-time configuration
-    y_test: numpy.ndarray - 1D array of performance values for target compile-time configuration
+    y_validate: numpy.ndarray - 1D array of performance values for target compile-time configuration
     """
-    _, _, X_train, X_test = Dataset.get_split_dataset(xs1, ys1, random_state=random_state)
-    _, _, y_train, y_test = Dataset.get_split_dataset(xs2, ys2, random_state=random_state)
+    _, _, X_train, X_validate = Dataset.get_split_dataset(xs_source, ys_source, random_state=random_state)
+    _, _, y_train, y_validate = Dataset.get_split_dataset(xs_target, ys_target, random_state=random_state)
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
-    X_test = np.array(list(map(lambda x: np.array([x]), X_test)))
+    X_validate = np.array(list(map(lambda x: np.array([x]), X_validate)))
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_validate, y_train, y_validate
 
 
 class Dataset:
@@ -102,20 +105,21 @@ class Dataset:
         return xs, ys
 
     @staticmethod
-    def get_split_dataset(xs, ys, test_size=0.2, random_state=42):
+    def get_split_dataset(xs, ys, validation_size=0.2, random_state=42):
         """
         Splits dataset into training and test set
         Parameters
         ----------
         xs: numpy.ndarray - array of prepared feature vectors for all input samples
         ys: numpy.ndarray - array of performance values for all input samples
-        test_size: float - portion of dataset to assign as the test set. range between 0-1
+        validation_size: float - portion of dataset to assign as the test set. range between 0-1
+        random_state: int - Seed for random data sampling
 
         Returns
         -------
-        X_train: numpy.ndarray - array of training sample feature vectors
-        X_test: numpy.ndarray - array of test sample feature vectors
-        y_train: numpy.ndarray - array of measured training sample performance values
-        y_test: numpy.ndarray - array of test sample performance values
+        X_train: numpy.ndarray - array of training set feature vectors
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_train: numpy.ndarray - array of measured training set performance values
+        y_validate: numpy.ndarray - array of measured validation set performance values
         """
-        return train_test_split(xs, ys, test_size=test_size, random_state=random_state)
+        return train_test_split(xs, ys, test_size=validation_size, random_state=random_state)
