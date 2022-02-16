@@ -109,7 +109,8 @@ class Dataset:
         ----------
         xs: numpy.ndarray - array of prepared feature vectors for all input samples
         ys: numpy.ndarray - array of performance values for all input samples
-        test_size: float - portion of dataset to assign as the test set. range between 0-1
+        validation_size: float - portion of dataset to assign as the test set. range between 0-1
+        random_state: int - Seed for random data sampling
 
         Returns
         -------
