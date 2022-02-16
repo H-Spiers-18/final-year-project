@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from time import time
 
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_percentage_error as mape
@@ -71,8 +72,7 @@ class Learner(ABC):
         """
         pass
 
-    @staticmethod
-    def get_error(y_test, y_pred, measure='mape'):
+    def get_error(self, xs, ys, measure='mape'):
         """
         Calculate the accuracy of the machine learning model using either MSE or MAPE
         Parameters
@@ -85,13 +85,14 @@ class Learner(ABC):
         -------
         numpy.ndarray - contains the measured error of each input prediction value
         """
-        measure = measure.upper()
-        if measure == 'MAPE':
-            return mape(y_test, y_pred)*100
-        elif measure == 'MSE':
-            return mse(y_test, y_pred)
-        else:
-            raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
+        # measure = measure.upper()
+        # if measure == 'MAPE':
+        #     return mape(y_test, y_pred)*100
+        # elif measure == 'MSE':
+        #     return mse(y_test, y_pred)
+        # else:
+        #     raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
+        return cross_val_score(self.model, xs, ys, cv=5, scoring='neg_mean_absolute_percentage_error')
 
     def get_training_time(self):
         """
