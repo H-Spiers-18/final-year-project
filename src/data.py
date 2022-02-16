@@ -29,18 +29,18 @@ def get_transfer_dataset(xs1, ys1, xs2, ys2, random_state=42):
 
     Returns
     -------
-    A training set (X_train, y_train) and a test set (X_test, y_test)
+    A training set (X_train, y_train) and a validation set (X_validate, y_validate)
     X_train: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
-    X_test: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
+    X_validate: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time configuration
     y_train: numpy.ndarray - 1D array of performance values for target compile-time configuration
-    y_test: numpy.ndarray - 1D array of performance values for target compile-time configuration
+    y_validate: numpy.ndarray - 1D array of performance values for target compile-time configuration
     """
-    _, _, X_train, X_test = Dataset.get_split_dataset(xs1, ys1, random_state=random_state)
-    _, _, y_train, y_test = Dataset.get_split_dataset(xs2, ys2, random_state=random_state)
+    _, _, X_train, X_validate = Dataset.get_split_dataset(xs1, ys1, random_state=random_state)
+    _, _, y_train, y_validate = Dataset.get_split_dataset(xs2, ys2, random_state=random_state)
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
-    X_test = np.array(list(map(lambda x: np.array([x]), X_test)))
+    X_validate = np.array(list(map(lambda x: np.array([x]), X_validate)))
 
-    return X_train, X_test, y_train, y_test
+    return X_train, X_validate, y_train, y_validate
 
 
 class Dataset:
