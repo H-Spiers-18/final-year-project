@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_percentage_error as mape
@@ -23,7 +24,7 @@ class Learner(ABC):
         super().__init__()
 
     @abstractmethod
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train, premade_model=None):
         """
         Trains a machine learning model given one or more input samples and expected outcomes
         Implemented in PredictorLearner and TransferLearner
@@ -31,6 +32,7 @@ class Learner(ABC):
         ----------
         x_train: numpy.ndarray - array of training sample feature vectors
         y_train: numpy.ndarray - array of measured training sample performance values
+        premade_model: sklearn model - Optional parameter for an optimised model defined using cross validation
 
         Returns
         -------
@@ -41,10 +43,27 @@ class Learner(ABC):
     @abstractmethod
     def predict(self, x_test):
         """
-        Predicts the performance value of one or more run-time configurations
+        Predicts the performance value of one or more run-time configurations. Implemented in PredictorLearner and
+        TransferLearner
         Parameters
         ----------
         x_test: numpy.ndarray - array of test sample feature vectors
+
+        Returns
+        -------
+        None
+        """
+        pass
+
+    @abstractmethod
+    def get_optimal_params(self, X_validate, y_validate):
+        """
+        Perform a grid search of all possible hyperparameter configurations with 5-fold cross validation and MAPE
+        to find the best performing hyperparameter set. Implemented in PredictorLearner and TransferLearner
+        Parameters
+        ----------
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
         -------
@@ -91,21 +110,24 @@ class PredictorLearner(Learner):
     def __init__(self):
         super().__init__()
 
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train, premade_model=None):
         """
-        Implements abstract method fit(). Fits data using a regression tree. For more info, see Learner.fit
+        Implements abstract method. Fits data using a regression tree. For more info, see Learner.fit
         Returns
         -------
         None
         """
         start_time = time()
-        self.model = DecisionTreeRegressor(random_state=20)
+        if premade_model is not None:
+            self.model = premade_model
+        else:
+            self.model = DecisionTreeRegressor()
         self.model.fit(x_train, y_train)
         self.training_time = time()-start_time
 
     def predict(self, x_test):
         """
-        Implements abstract method predict(). Predicts the performance value of one or more run-time configurations.
+        Implements abstract method. Predicts the performance value of one or more run-time configurations.
         For more info, see learner.predict
 
         Returns
@@ -115,12 +137,33 @@ class PredictorLearner(Learner):
         y_pred = self.model.predict(x_test)
         return y_pred
 
+    def get_optimal_params(self, X_validate, y_validate):
+        """
+        Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
+        5-fold cross validation and MAPE to find the best performing hyperparameter set.
+        Parameters
+        ----------
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_validate: numpy.ndarray - array of validation set measured performance values
+
+        Returns
+        -------
+        2-tuple containing:
+        DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
+        float - MAPE score of best performing configuration
+        """
+        param_grid = constants.REGRESSION_TREE_PARAM_GRID
+        temp_model = DecisionTreeRegressor()
+        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
+        cv.fit(X_validate, y_validate)
+        return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
+
 
 class TransferLearner(Learner):
     """Class for training and using a model for transferring run-time configurations between compile-time configurations
      using a linear regression learner. Implements abstract class Learner"""
 
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train, premade_model=None):
         """
         Implements abstract method fit(). Fits data using linear regression. For more info, see Learner.fit
         Returns
@@ -128,7 +171,10 @@ class TransferLearner(Learner):
         None
         """
         start_time = time()
-        self.model = LinearRegression(positive=True, fit_intercept=False)
+        if premade_model is not None:
+            self.model = premade_model
+        else:
+            self.model = LinearRegression()
         self.model.fit(x_train, y_train)
         self.training_time = time() - start_time
 
@@ -143,3 +189,24 @@ class TransferLearner(Learner):
         """
         y_pred = self.model.predict(x_test)
         return y_pred
+
+    def get_optimal_params(self, X_validate, y_validate):
+        """
+        Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
+        5-fold cross validation and MAPE to find the best performing hyperparameter set.
+        Parameters
+        ----------
+        X_validate: numpy.ndarray - array of validation set feature vectors
+        y_validate: numpy.ndarray - array of validation set measured performance values
+
+        Returns
+        -------
+        2-tuple containing:
+        DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
+        float - MAPE score of best performing configuration
+        """
+        param_grid = constants.LINEAR_REGRESSION_PARAM_GRID
+        temp_model = LinearRegression()
+        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
+        cv.fit(X_validate, y_validate)
+        return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
