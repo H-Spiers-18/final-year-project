@@ -156,7 +156,7 @@ class PredictorLearner(Learner):
         temp_model = DecisionTreeRegressor()
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
-        return cv.best_estimator_, max(cv.cv_results_['mean_test_score'])*-100
+        return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
 
 
 class TransferLearner(Learner):
@@ -205,4 +205,8 @@ class TransferLearner(Learner):
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
         float - MAPE score of best performing configuration
         """
-        pass
+        param_grid = constants.LINEAR_REGRESSION_PARAM_GRID
+        temp_model = LinearRegression()
+        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
+        cv.fit(X_validate, y_validate)
+        return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
