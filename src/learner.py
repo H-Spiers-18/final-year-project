@@ -85,13 +85,6 @@ class Learner(ABC):
         -------
         numpy.ndarray - contains the measured error of each input prediction value
         """
-        # measure = measure.upper()
-        # if measure == 'MAPE':
-        #     return mape(y_test, y_pred)*100
-        # elif measure == 'MSE':
-        #     return mse(y_test, y_pred)
-        # else:
-        #     raise InvalidAccuracyMeasureException(constants.INVALID_ACCURACY_MEASURE_MSG)
         return cross_val_score(self.model, xs, ys, cv=5, scoring='neg_mean_absolute_percentage_error')
 
     def get_training_time(self):
