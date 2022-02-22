@@ -106,6 +106,23 @@ class Dataset:
         for col in cols[1:nf_boundary]:
             self.dataset[col] = le.fit_transform(self.dataset[col].to_numpy())
 
+    def get_features_and_values(self, subject_system):
+        """
+        Gets and returns the feature vectors and measured performance values for all samples in our dataset
+        Parameters
+        ----------
+        subject_system: str - says which subject system the dataset belongs to. value can be nodejs, poppler, x264 or xz
+
+        Returns
+        -------
+        xs: numpy.ndarray - 2d array containing feature vectors for all samples
+        ys: numpy.ndarray - 1d array containing all performance values
+        """
+        # grab column names from dataset csv
+        cols = self.dataset.columns.values
+        # grab the column index at which the configuration options stop and the non-functional property values begin
+        nf_boundary = NFPropertyBoundaryIndexes[subject_system.upper()].value
+
         # split our dataset into feature vectors and measured performance values
         # skip the first item since that's just the index of the run-time configuration
         xs = self.dataset[cols[1:nf_boundary]].to_numpy()
