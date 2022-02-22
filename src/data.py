@@ -137,8 +137,6 @@ class Dataset:
         Splits dataset into training and test set
         Parameters
         ----------
-        xs: numpy.ndarray - array of prepared feature vectors for all input samples
-        ys: numpy.ndarray - array of performance values for all input samples
         validation_size: float - portion of dataset to assign as the test set. range between 0-1
         random_state: int - Seed for random data sampling
 
