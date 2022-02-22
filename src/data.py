@@ -100,13 +100,11 @@ class Dataset:
         ys: numpy.ndarray - array of performance values for all input samples
         """
         le = LabelEncoder()
-        # grab column names from dataset csv
         cols = self.dataset.columns.values
         # grab the column index at which the configuration options stop and the non-functional property values begin
         nf_boundary = NFPropertyBoundaryIndexes[subject_system.upper()].value
 
-        # change feature values of type str to a numbered value so that our regression approaches can use them
-        # each str is mapped to a single int
+        # change nominal feature values to numeric
         for col in cols[1:nf_boundary]:
             self.dataset[col] = le.fit_transform(self.dataset[col].to_numpy())
 
@@ -122,18 +120,17 @@ class Dataset:
         xs: numpy.ndarray - 2d array containing feature vectors for all samples
         ys: numpy.ndarray - 1d array containing all performance values
         """
-        # grab column names from dataset csv
         cols = self.dataset.columns.values
         # grab the column index at which the configuration options stop and the non-functional property values begin
         nf_boundary = NFPropertyBoundaryIndexes[subject_system.upper()].value
 
         # split our dataset into feature vectors and measured performance values
         # skip the first item since that's just the index of the run-time configuration
-        xs = self.dataset[cols[1:nf_boundary]].to_numpy()
+        features = self.dataset[cols[1:nf_boundary]].to_numpy()
         # grab the performance value
-        ys = self.dataset[cols[-1]].to_numpy()
+        values = self.dataset[cols[-1]].to_numpy()
 
-        return xs, ys
+        return features, values
 
     @staticmethod
     def get_split_dataset(xs, ys, validation_size=0.2, random_state=42):
