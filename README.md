@@ -12,7 +12,7 @@ Note: All code is held in src folder
 4. Activate your virtual environment using `cd .venv/Scripts` and then `activate.bat`. If this has worked you'll now see 
 a (.venv) prefix in your CMD window
 5. Use `cd ../../src` to enter the src folder
-6. Install all dependencies for the project using `pip install -r requirements.txt`
+6. Install all dependencies for the project using `py -m pip install -r requirements.txt`
 7. Add our virtual environment to the iPython kernel using `ipython kernel install --user --name=.venv`
 8. Finally, run your Notebook inside our virtual environment using `py -m jupyter notebook`
 
