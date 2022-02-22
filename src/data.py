@@ -132,8 +132,7 @@ class Dataset:
 
         return features, values
 
-    @staticmethod
-    def get_split_dataset(xs, ys, validation_size=0.2, random_state=42):
+    def get_split_dataset(self, validation_size=0.2, random_state=42):
         """
         Splits dataset into training and test set
         Parameters
@@ -150,4 +149,4 @@ class Dataset:
         y_train: numpy.ndarray - array of measured training set performance values
         y_validate: numpy.ndarray - array of measured validation set performance values
         """
-        return train_test_split(xs, ys, test_size=validation_size, random_state=random_state)
+        return train_test_split(self.features, self.values, test_size=validation_size, random_state=random_state)
