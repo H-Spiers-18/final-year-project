@@ -50,13 +50,16 @@ def get_transfer_dataset(xs_source, ys_source, xs_target, ys_target, random_stat
 
 
 class Dataset:
-    """Used to contain dataset used for testing and training models"""
+    """Used to contain dataset used for training models"""
 
     dataset: pd.DataFrame
+    features: np.ndarray
+    values: np.ndarray
 
     def __init__(self, csv_path, subject_system):
         self.dataset = self.__set_dataset(csv_path)
         self.__prepare_dataset(subject_system)
+        self.features, self.values = self.__get_features_and_values(subject_system)
 
     @staticmethod
     def __set_dataset(csv_path):
@@ -107,7 +110,7 @@ class Dataset:
         for col in cols[1:nf_boundary]:
             self.dataset[col] = le.fit_transform(self.dataset[col].to_numpy())
 
-    def get_features_and_values(self, subject_system):
+    def __get_features_and_values(self, subject_system):
         """
         Gets and returns the feature vectors and measured performance values for all samples in our dataset
         Parameters
