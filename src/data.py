@@ -54,8 +54,9 @@ class Dataset:
 
     dataset: pd.DataFrame
 
-    def __init__(self, csv_path):
+    def __init__(self, csv_path, subject_system):
         self.dataset = self.__set_dataset(csv_path)
+        self.__prepare_dataset(subject_system)
 
     @staticmethod
     def __set_dataset(csv_path):
@@ -80,7 +81,7 @@ class Dataset:
         """
         return self.dataset
 
-    def prepare_dataset(self, subject_system):
+    def __prepare_dataset(self, subject_system):
         """
         Prepares the dataset so that it is ready for the predictor learner. this involves:
             - split the dataset into xs (configuration options) and ys (measured performance value)
