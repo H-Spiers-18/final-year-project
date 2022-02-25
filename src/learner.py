@@ -62,8 +62,8 @@ class Learner(ABC):
         """
         pass
 
-    @staticmethod
-    def get_optimal_params(X_validate, y_validate):
+    @abstractmethod
+    def get_optimal_params(self, X_validate, y_validate):
         """
         Perform a grid search of all possible hyperparameter configurations with 5-fold cross validation and MAPE
         to find the best performing hyperparameter set. Implemented in PredictorLearner and TransferLearner
@@ -140,8 +140,7 @@ class PredictorLearner(Learner):
         y_pred = self.model.predict(x_test)
         return y_pred
 
-    @staticmethod
-    def get_optimal_params(X_validate, y_validate):
+    def get_optimal_params(self, X_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
         5-fold cross validation and MAPE to find the best performing hyperparameter set.
@@ -198,8 +197,7 @@ class TransferLearner(Learner):
         y_pred = self.model.predict(x_test)
         return y_pred
 
-    @staticmethod
-    def get_optimal_params(X_validate, y_validate):
+    def get_optimal_params(self, X_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
         5-fold cross validation and MAPE to find the best performing hyperparameter set.
