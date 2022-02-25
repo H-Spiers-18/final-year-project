@@ -22,12 +22,10 @@ def get_transfer_dataset(d_src, d_target, validation_size=0.2, random_state=42):
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
     Parameters
     ----------
-    xs_source: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for source compile-time
-                               configuration
-    ys_source: numpy.ndarray - 1D array of performance values for source compile-time configuration
-    xs_target: numpy.ndarray - 2D array (shape (N,1)) of measured performance values for target compile-time
-                               configuration
-    ys_target: numpy.ndarray - 1D array of performance values for target compile-time configuration
+    d_src: Dataset - Dataset object for source compile-time configuration
+    d_target: Dataset - Dataset object for target compile-time configuration
+    validation_size: float - Size of the validation set
+    random_state: int - Seed for random sampler
 
     Returns
     -------
