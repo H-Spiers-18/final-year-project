@@ -17,7 +17,7 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
-def get_transfer_dataset(xs_source, ys_source, xs_target, ys_target, random_state=42):
+def get_transfer_dataset(d_src, d_target, validation_size=0.2, random_state=42):
     """
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
     Parameters
@@ -39,8 +39,8 @@ def get_transfer_dataset(xs_source, ys_source, xs_target, ys_target, random_stat
     y_validate: numpy.ndarray - 1D array of performance values for target compile-time configuration
     """
     # split both datasets. we ignore the first 2 values since we only want the performance values for our transfer model
-    _, _, X_train, X_validate = Dataset.get_split_dataset(xs_source, ys_source, random_state=random_state)
-    _, _, y_train, y_validate = Dataset.get_split_dataset(xs_target, ys_target, random_state=random_state)
+    _, _, X_train, X_validate = d_src.get_split_dataset(validation_size=validation_size, random_state=random_state)
+    _, _, y_train, y_validate = d_target.get_split_dataset(validation_size=validation_size, random_state=random_state)
     # convert the source configuration performance values from shape (N) to (N,1) since that's the shape sklearn wants
     # from feature vectors regardless of their dimensionality
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
