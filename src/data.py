@@ -130,12 +130,13 @@ class Dataset:
 
         return features, values
 
-    def get_split_dataset(self, validation_size=0.2, random_state=42):
+    def get_split_dataset(self, train_size=0.8, validation_size=0.2, random_state=42):
         """
         Splits dataset into training and test set
         Parameters
         ----------
-        validation_size: float - portion of dataset to assign as the test set. range between 0-1
+        train_size: float - portion of dataset to assign as the training set. range between 0-1
+        validation_size: float - portion of dataset to assign as the validation set. range between 0-1
         random_state: int - Seed for random data sampling
 
         Returns
@@ -145,4 +146,8 @@ class Dataset:
         y_train: numpy.ndarray - array of measured training set performance values
         y_validate: numpy.ndarray - array of measured validation set performance values
         """
-        return train_test_split(self.features, self.values, test_size=validation_size, random_state=random_state)
+        return train_test_split(self.features,
+                                self.values,
+                                train_size=train_size,
+                                test_size=validation_size,
+                                random_state=random_state)
