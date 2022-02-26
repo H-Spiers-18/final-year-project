@@ -101,7 +101,7 @@ class Learner(ABC):
         -------
         float - time taken in seconds to train model
         """
-        return self.training_time*1000
+        return self.training_time
 
 
 class PredictorLearner(Learner):
