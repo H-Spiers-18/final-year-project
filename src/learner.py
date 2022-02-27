@@ -28,6 +28,7 @@ class Learner(ABC):
     def __init__(self):
         self.model = None
         self.training_time = 0
+        self.param_optimisation_time = 0
         super().__init__()
 
     @abstractmethod
@@ -94,14 +95,17 @@ class Learner(ABC):
         measure = measure.upper() # convert measure to upper to ensure it matches CrossValScoringMethods key
         return cross_val_score(self.model, xs, ys, cv=5, scoring=CrossValScoringMethods[measure].value)
 
-    def get_training_time(self):
+    def get_training_time(self, include_optimisation_time=False):
         """
         Gets time taken to train the model
         Returns
         -------
         float - time taken in seconds to train model
         """
-        return self.training_time*1000
+        if include_optimisation_time:
+            return self.training_time + self.param_optimisation_time
+        else:
+            return self.training_time
 
 
 class PredictorLearner(Learner):
@@ -155,11 +159,13 @@ class PredictorLearner(Learner):
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
         float - MAPE score of best performing configuration
         """
+        start_time = time()
         param_grid = constants.REGRESSION_TREE_PARAM_GRID
         temp_model = DecisionTreeRegressor()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
+        self.param_optimisation_time = time()-start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
 
