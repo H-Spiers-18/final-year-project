@@ -17,7 +17,7 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
-def get_transfer_dataset(d_src, d_target, validation_size=0.2, random_state=42):
+def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, random_state=42):
     """
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
     Parameters
