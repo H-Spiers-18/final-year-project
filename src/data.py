@@ -24,6 +24,7 @@ def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, r
     ----------
     d_src: Dataset - Dataset object for source compile-time configuration
     d_target: Dataset - Dataset object for target compile-time configuration
+    train_size: float - Size of the training set
     validation_size: float - Size of the validation set
     random_state: int - Seed for random sampler
 
@@ -37,10 +38,13 @@ def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, r
     y_validate: numpy.ndarray - 1D array of performance values for target compile-time configuration
     """
     # split both datasets. we ignore the first 2 values since we only want the performance values for our transfer model
-    _, _, X_train, X_validate = d_src.get_split_dataset(validation_size=validation_size, random_state=random_state)
-    _, _, y_train, y_validate = d_target.get_split_dataset(validation_size=validation_size, random_state=random_state)
-    # convert the source configuration performance values from shape (N) to (N,1) since that's the shape sklearn wants
-    # from feature vectors regardless of their dimensionality
+    _, _, X_train, X_validate = d_src.get_split_dataset(train_size=train_size,
+                                                        validation_size=validation_size,
+                                                        random_state=random_state)
+    _, _, y_train, y_validate = d_target.get_split_dataset(train_size=train_size,
+                                                           validation_size=validation_size,
+                                                           random_state=random_state)
+    # add an extra dimension to the source performance measurements since that's the input shape that sklearn wants
     X_train = np.array(list(map(lambda x: np.array([x]), X_train)))
     X_validate = np.array(list(map(lambda x: np.array([x]), X_validate)))
 
