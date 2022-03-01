@@ -3,6 +3,9 @@
 # Cross validation number of folds
 CV_FOLDS = 5
 
+# Experiment repetitions
+EXPERIMENT_REPS = 5
+
 # Index for each dataset where the configuration options end and non-functional properties begin
 NODEJS_NF_BOUNDARY = -1
 POPPLER_NF_BOUNDARY = -2
