@@ -92,7 +92,7 @@ class Learner(ABC):
         -------
         numpy.ndarray - contains the measured error of each input prediction value
         """
-        measure = measure.upper()  # convert measure to upper to ensure it matches CrossValScoringMethods key
+        measure = measure.upper()  # convert measure to uppercase to ensure it matches CrossValScoringMethods key
         cv_score = cross_val_score(self.model,
                                    xs,
                                    ys,
