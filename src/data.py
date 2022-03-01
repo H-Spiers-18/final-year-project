@@ -17,6 +17,17 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
+def get_random_datasets():
+    """
+    Selects 2 random datasets for each subject system for each experiment repetition
+    Returns
+    -------
+    datasets: 2d list of tuples - Contains N tuples, each with a source and target dataset for each subject system
+                                  (8 in total per repetition) where N is the number of experiment repetitions
+    """
+    pass
+
+
 def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, random_state=42):
     """
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
