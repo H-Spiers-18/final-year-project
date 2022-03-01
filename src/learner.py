@@ -92,8 +92,14 @@ class Learner(ABC):
         -------
         numpy.ndarray - contains the measured error of each input prediction value
         """
-        measure = measure.upper() # convert measure to upper to ensure it matches CrossValScoringMethods key
-        return cross_val_score(self.model, xs, ys, cv=5, scoring=CrossValScoringMethods[measure].value)
+        measure = measure.upper()  # convert measure to uppercase to ensure it matches CrossValScoringMethods key
+        cv_score = cross_val_score(self.model,
+                                   xs,
+                                   ys,
+                                   cv=constants.CV_FOLDS,
+                                   scoring=CrossValScoringMethods[measure].value)
+
+        return sum(cv_score)/len(cv_score)
 
     def get_training_time(self, include_optimisation_time=False):
         """
