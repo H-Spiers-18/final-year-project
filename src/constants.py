@@ -6,6 +6,12 @@ CV_FOLDS = 5
 # Experiment repetitions
 EXPERIMENT_REPS = 5
 
+# Dataset paths
+NODEJS_PATH = '../dataset/nodejs'
+POPPLER_PATH = '../dataset/poppler'
+X264_PATH = '../dataset/x264'
+XZ_PATH = '../dataset/xz'
+
 # Index for each dataset where the configuration options end and non-functional properties begin
 NODEJS_NF_BOUNDARY = -1
 POPPLER_NF_BOUNDARY = -2
