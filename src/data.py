@@ -21,7 +21,7 @@ class NFPropertyBoundaryIndexes(Enum):
 
 def get_random_dataset_paths():
     """
-    Selects 2 random datasets for each subject system for each experiment repetition
+    Selects 2 random datasets for each subject system for each experiment repetition (without replacement)
     Returns
     -------
     datasets: tuples - A tuple for each subject system, each with a source and target dataset (8 in total)
