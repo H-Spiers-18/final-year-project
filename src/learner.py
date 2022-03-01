@@ -173,7 +173,7 @@ class PredictorLearner(Learner):
         cv.fit(X_validate, y_validate)
         self.param_optimisation_time = time()-start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
-        return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
+        return cv.best_estimator_
 
 
 class TransferLearner(Learner):
@@ -230,4 +230,4 @@ class TransferLearner(Learner):
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
-        return cv.best_estimator_, max(cv.cv_results_['mean_test_score']) * -100
+        return cv.best_estimator_
