@@ -19,26 +19,32 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
-def get_random_dataset_paths():
+def get_random_datasets():
     """
     Selects 2 random datasets for each subject system for each experiment repetition (without replacement)
     Returns
     -------
-    datasets: tuples - A tuple for each subject system, each with a source and target dataset (8 in total)
+    datasets: tuples of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
     """
     # randomly select the directory of 2 datasets for each subject system
-    nodejs_dataset_paths = tuple(random.sample(
-                                 [os.path.join(constants.NODEJS_PATH, x) for x in os.listdir(constants.NODEJS_PATH)
-                                  if os.path.isdir(os.path.join(constants.NODEJS_PATH, x))], 2))
-    poppler_dataset_paths = tuple(random.sample(
-                                 [os.path.join(constants.POPPLER_PATH, x) for x in os.listdir(constants.POPPLER_PATH)
-                                  if os.path.isdir(os.path.join(constants.POPPLER_PATH, x))], 2))
-    x264_dataset_paths = tuple(random.sample(
-                               [os.path.join(constants.X264_PATH, x) for x in os.listdir(constants.X264_PATH)
-                                if os.path.isdir(os.path.join(constants.X264_PATH, x))], 2))
-    xz_dataset_paths = tuple(random.sample(
-                             [os.path.join(constants.XZ_PATH, x) for x in os.listdir(constants.XZ_PATH)
-                              if os.path.isdir(os.path.join(constants.XZ_PATH, x))], 2))
+    nodejs_dataset_paths = \
+        tuple(random.sample([Dataset(os.path.join(constants.NODEJS_PATH, ctime_dir, constants.NODEJS_CSV_PATH),
+                                     'nodejs')
+                            for ctime_dir in os.listdir(constants.NODEJS_PATH)
+                            if os.path.isdir(os.path.join(constants.NODEJS_PATH, ctime_dir))], 2))
+    poppler_dataset_paths = \
+        tuple(random.sample([Dataset(os.path.join(constants.POPPLER_PATH, ctime_dir, constants.POPPLER_CSV_PATH),
+                                     'poppler')
+                            for ctime_dir in os.listdir(constants.POPPLER_PATH)
+                            if os.path.isdir(os.path.join(constants.POPPLER_PATH, ctime_dir))], 2))
+    x264_dataset_paths = \
+        tuple(random.sample([Dataset(os.path.join(constants.X264_PATH, ctime_dir, constants.X264_CSV_PATH), 'x264')
+                            for ctime_dir in os.listdir(constants.X264_PATH)
+                            if os.path.isdir(os.path.join(constants.X264_PATH, ctime_dir))], 2))
+    xz_dataset_paths = \
+        tuple(random.sample([Dataset(os.path.join(constants.XZ_PATH, ctime_dir, constants.XZ_CSV_PATH), 'xz')
+                            for ctime_dir in os.listdir(constants.XZ_PATH)
+                            if os.path.isdir(os.path.join(constants.XZ_PATH, ctime_dir))], 2))
 
     return nodejs_dataset_paths, poppler_dataset_paths, x264_dataset_paths, xz_dataset_paths
 
