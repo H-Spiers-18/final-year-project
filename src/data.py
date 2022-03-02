@@ -27,26 +27,26 @@ def get_random_datasets():
     datasets: tuples of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
     """
     # randomly select 2 datasets for each subject system
-    nodejs_dataset_paths = \
+    nodejs_datasets = \
         tuple(random.sample([Dataset(os.path.join(constants.NODEJS_PATH, ctime_dir, constants.NODEJS_CSV_PATH),
                                      'nodejs')
                             for ctime_dir in os.listdir(constants.NODEJS_PATH)
                             if os.path.isdir(os.path.join(constants.NODEJS_PATH, ctime_dir))], 2))
-    poppler_dataset_paths = \
+    poppler_datasets = \
         tuple(random.sample([Dataset(os.path.join(constants.POPPLER_PATH, ctime_dir, constants.POPPLER_CSV_PATH),
                                      'poppler')
                             for ctime_dir in os.listdir(constants.POPPLER_PATH)
                             if os.path.isdir(os.path.join(constants.POPPLER_PATH, ctime_dir))], 2))
-    x264_dataset_paths = \
+    x264_datasets = \
         tuple(random.sample([Dataset(os.path.join(constants.X264_PATH, ctime_dir, constants.X264_CSV_PATH), 'x264')
                             for ctime_dir in os.listdir(constants.X264_PATH)
                             if os.path.isdir(os.path.join(constants.X264_PATH, ctime_dir))], 2))
-    xz_dataset_paths = \
+    xz_datasets = \
         tuple(random.sample([Dataset(os.path.join(constants.XZ_PATH, ctime_dir, constants.XZ_CSV_PATH), 'xz')
                             for ctime_dir in os.listdir(constants.XZ_PATH)
                             if os.path.isdir(os.path.join(constants.XZ_PATH, ctime_dir))], 2))
 
-    return nodejs_dataset_paths, poppler_dataset_paths, x264_dataset_paths, xz_dataset_paths
+    return nodejs_datasets, poppler_datasets, x264_datasets, xz_datasets
 
 
 def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, random_state=42):
