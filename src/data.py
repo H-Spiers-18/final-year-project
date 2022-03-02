@@ -26,7 +26,7 @@ def get_random_datasets():
     -------
     datasets: tuples of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
     """
-    # randomly select the directory of 2 datasets for each subject system
+    # randomly select 2 datasets for each subject system
     nodejs_dataset_paths = \
         tuple(random.sample([Dataset(os.path.join(constants.NODEJS_PATH, ctime_dir, constants.NODEJS_CSV_PATH),
                                      'nodejs')
