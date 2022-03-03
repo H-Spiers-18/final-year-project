@@ -24,7 +24,7 @@ def get_random_datasets():
     Selects 2 random datasets for each subject system for each experiment repetition (without replacement)
     Returns
     -------
-    datasets: tuples of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
+    datasets: dict of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
     """
     # randomly select 2 datasets for each subject system
     nodejs_datasets = \
@@ -46,7 +46,14 @@ def get_random_datasets():
                             for ctime_dir in os.listdir(constants.XZ_PATH)
                             if os.path.isdir(os.path.join(constants.XZ_PATH, ctime_dir))], 2))
 
-    return nodejs_datasets, poppler_datasets, x264_datasets, xz_datasets
+    datasets = {
+        'NODEJS': nodejs_datasets,
+        'POPPLER': poppler_datasets,
+        'X264': x264_datasets,
+        'XZ': xz_datasets
+    }
+
+    return datasets
 
 
 def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, random_state=42):
