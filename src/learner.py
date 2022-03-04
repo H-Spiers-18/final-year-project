@@ -129,7 +129,7 @@ class PredictorLearner(Learner):
         None
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()/1000000
+        start_time = time_ns()//1000000
         # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
@@ -137,7 +137,7 @@ class PredictorLearner(Learner):
             self.model = DecisionTreeRegressor()
         # train the model
         self.model.fit(x_train, y_train)
-        self.training_time = (time_ns()/1000000)-start_time
+        self.training_time = (time_ns()//1000000)-start_time
 
     def predict(self, x_test):
         """
@@ -167,13 +167,13 @@ class PredictorLearner(Learner):
         float - MAPE score of best performing configuration
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()/1000000
+        start_time = time_ns()//1000000
         param_grid = constants.REGRESSION_TREE_PARAM_GRID
         temp_model = DecisionTreeRegressor()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
-        self.param_optimisation_time = (time_ns()/1000000)-start_time
+        self.param_optimisation_time = (time_ns()//1000000)-start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
 
@@ -190,7 +190,7 @@ class TransferLearner(Learner):
         None
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()/1000000
+        start_time = time_ns()//1000000
         # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
@@ -198,7 +198,7 @@ class TransferLearner(Learner):
             self.model = LinearRegression()
         # train the model
         self.model.fit(x_train, y_train)
-        self.training_time = (time_ns()/1000000) - start_time
+        self.training_time = (time_ns()//1000000) - start_time
 
     def predict(self, x_test):
         """
@@ -228,12 +228,12 @@ class TransferLearner(Learner):
         float - MAPE score of best performing configuration
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()/1000000
+        start_time = time_ns()//1000000
         param_grid = constants.LINEAR_REGRESSION_PARAM_GRID
         temp_model = LinearRegression()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
         cv.fit(X_validate, y_validate)
-        self.param_optimisation_time = (time_ns()/1000000) - start_time
+        self.param_optimisation_time = (time_ns()//1000000) - start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
