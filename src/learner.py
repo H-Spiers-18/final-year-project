@@ -164,7 +164,6 @@ class PredictorLearner(Learner):
         -------
         2-tuple containing:
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
-        float - MAPE score of best performing configuration
         """
         # get time in nanoseconds and convert to milliseconds
         start_time = time_ns()//1000000
@@ -225,7 +224,6 @@ class TransferLearner(Learner):
         -------
         2-tuple containing:
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
-        float - MAPE score of best performing configuration
         """
         # get time in nanoseconds and convert to milliseconds
         start_time = time_ns()//1000000
