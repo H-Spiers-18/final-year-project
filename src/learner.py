@@ -99,7 +99,11 @@ class Learner(ABC):
                                    cv=constants.CV_FOLDS,
                                    scoring=CrossValScoringMethods[measure].value)
 
-        return sum(cv_score)/len(cv_score)
+        if measure == 'MAPE':
+            return (sum(cv_score)/len(cv_score))*-100#
+        else:
+            return sum(cv_score) / len(cv_score)
+
 
     def get_training_time(self, include_optimisation_time=False):
         """
@@ -164,7 +168,6 @@ class PredictorLearner(Learner):
         -------
         2-tuple containing:
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
-        float - MAPE score of best performing configuration
         """
         # get time in nanoseconds and convert to milliseconds
         start_time = time_ns()//1000000
@@ -225,7 +228,6 @@ class TransferLearner(Learner):
         -------
         2-tuple containing:
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
-        float - MAPE score of best performing configuration
         """
         # get time in nanoseconds and convert to milliseconds
         start_time = time_ns()//1000000
