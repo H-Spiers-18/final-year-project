@@ -4,6 +4,9 @@
 # Dataset
 dataset
 
+# Results CSV files
+results
+
 # Test notebook
 test.ipynb
 
