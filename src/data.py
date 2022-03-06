@@ -106,8 +106,10 @@ class Dataset:
     dataset: pd.DataFrame
     features: np.ndarray
     values: np.ndarray
+    csv_path: str
 
     def __init__(self, csv_path, subject_system):
+        self.csv_path = csv_path
         self.dataset = self.__set_dataset(csv_path)
         self.__prepare_dataset(subject_system)
         self.features, self.values = self.__get_features_and_values(subject_system)
@@ -134,6 +136,9 @@ class Dataset:
         pandas.DataFrame - dataset's current state
         """
         return self.dataset
+
+    def get_csv_path(self):
+        return self.csv_path
 
     def __prepare_dataset(self, subject_system):
         """
