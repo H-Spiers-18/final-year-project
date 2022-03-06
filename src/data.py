@@ -26,25 +26,35 @@ def get_random_datasets():
     -------
     datasets: dict of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
     """
-    # randomly select 2 datasets for each subject system
-    nodejs_datasets = \
-        tuple(random.sample([Dataset(os.path.join(constants.NODEJS_PATH, ctime_dir, constants.NODEJS_CSV_PATH),
-                                     'nodejs')
-                            for ctime_dir in os.listdir(constants.NODEJS_PATH)
-                            if os.path.isdir(os.path.join(constants.NODEJS_PATH, ctime_dir))], 2))
-    poppler_datasets = \
-        tuple(random.sample([Dataset(os.path.join(constants.POPPLER_PATH, ctime_dir, constants.POPPLER_CSV_PATH),
-                                     'poppler')
-                            for ctime_dir in os.listdir(constants.POPPLER_PATH)
-                            if os.path.isdir(os.path.join(constants.POPPLER_PATH, ctime_dir))], 2))
-    x264_datasets = \
-        tuple(random.sample([Dataset(os.path.join(constants.X264_PATH, ctime_dir, constants.X264_CSV_PATH), 'x264')
-                            for ctime_dir in os.listdir(constants.X264_PATH)
-                            if os.path.isdir(os.path.join(constants.X264_PATH, ctime_dir))], 2))
-    xz_datasets = \
-        tuple(random.sample([Dataset(os.path.join(constants.XZ_PATH, ctime_dir, constants.XZ_CSV_PATH), 'xz')
-                            for ctime_dir in os.listdir(constants.XZ_PATH)
-                            if os.path.isdir(os.path.join(constants.XZ_PATH, ctime_dir))], 2))
+    nodejs_datasets = []
+    poppler_datasets = []
+    x264_datasets = []
+    xz_datasets = []
+    for rep in range(constants.EXPERIMENT_REPS):
+        # randomly select 2 datasets per subject system per experiment repetition
+        nodejs_tgt_src = \
+            tuple(random.sample([Dataset(os.path.join(constants.NODEJS_PATH, ctime_dir, constants.NODEJS_CSV_PATH),
+                                         'nodejs')
+                                for ctime_dir in os.listdir(constants.NODEJS_PATH)
+                                if os.path.isdir(os.path.join(constants.NODEJS_PATH, ctime_dir))], 2))
+        poppler_tgt_src = \
+            tuple(random.sample([Dataset(os.path.join(constants.POPPLER_PATH, ctime_dir, constants.POPPLER_CSV_PATH),
+                                         'poppler')
+                                for ctime_dir in os.listdir(constants.POPPLER_PATH)
+                                if os.path.isdir(os.path.join(constants.POPPLER_PATH, ctime_dir))], 2))
+        x264_tgt_src = \
+            tuple(random.sample([Dataset(os.path.join(constants.X264_PATH, ctime_dir, constants.X264_CSV_PATH), 'x264')
+                                for ctime_dir in os.listdir(constants.X264_PATH)
+                                if os.path.isdir(os.path.join(constants.X264_PATH, ctime_dir))], 2))
+        xz_tgt_src = \
+            tuple(random.sample([Dataset(os.path.join(constants.XZ_PATH, ctime_dir, constants.XZ_CSV_PATH), 'xz')
+                                for ctime_dir in os.listdir(constants.XZ_PATH)
+                                if os.path.isdir(os.path.join(constants.XZ_PATH, ctime_dir))], 2))
+
+        nodejs_datasets.append(nodejs_tgt_src)
+        poppler_datasets.append(poppler_tgt_src)
+        x264_datasets.append(x264_tgt_src)
+        xz_datasets.append(xz_tgt_src)
 
     datasets = {
         'NODEJS': nodejs_datasets,
