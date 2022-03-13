@@ -123,7 +123,7 @@ class PredictorLearner(Learner):
         None
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()//1000000
+        start_time = time_ns() // 1000000
         # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
@@ -131,7 +131,7 @@ class PredictorLearner(Learner):
             self.model = DecisionTreeRegressor()
         # train the model
         self.model.fit(x_train, y_train)
-        self.training_time = (time_ns()//1000000)-start_time
+        self.training_time = (time_ns() // 1000000) - start_time
 
     def get_optimal_params(self, x_validate, y_validate):
         """
@@ -147,13 +147,13 @@ class PredictorLearner(Learner):
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()//1000000
+        start_time = time_ns() // 1000000
         param_grid = constants.REGRESSION_TREE_PARAM_GRID
         temp_model = DecisionTreeRegressor()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring=constants.MAPE_SCORING)
         cv.fit(x_validate, y_validate)
-        self.param_optimisation_time = (time_ns()//1000000)-start_time
+        self.param_optimisation_time = (time_ns() // 1000000) - start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
 
