@@ -49,21 +49,6 @@ class Learner(ABC):
         pass
 
     @abstractmethod
-    def predict(self, x_test):
-        """
-        Predicts the performance value of one or more run-time configurations. Implemented in PredictorLearner and
-        TransferLearner
-        Parameters
-        ----------
-        x_test: numpy.ndarray - array of test sample feature vectors
-
-        Returns
-        -------
-        None
-        """
-        pass
-
-    @abstractmethod
     def get_optimal_params(self, X_validate, y_validate):
         """
         Perform a grid search of all possible hyperparameter configurations with 5-fold cross validation and MAPE
@@ -143,18 +128,6 @@ class PredictorLearner(Learner):
         self.model.fit(x_train, y_train)
         self.training_time = (time_ns()//1000000)-start_time
 
-    def predict(self, x_test):
-        """
-        Implements abstract method. Predicts the performance value of one or more run-time configurations.
-        For more info, see learner.predict
-
-        Returns
-        -------
-        y_pred: numpy.ndarray - predicted performance values for each of the input samples
-        """
-        y_pred = self.model.predict(x_test)
-        return y_pred
-
     def get_optimal_params(self, X_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
@@ -202,18 +175,6 @@ class TransferLearner(Learner):
         # train the model
         self.model.fit(x_train, y_train)
         self.training_time = (time_ns()//1000000) - start_time
-
-    def predict(self, x_test):
-        """
-        Implements abstract method predict(). Predicts the performance value of one or more run-time configurations.
-        For more info, see learner.predict
-
-        Returns
-        -------
-        y_pred: numpy.ndarray - predicted performance values for each of the input samples
-        """
-        y_pred = self.model.predict(x_test)
-        return y_pred
 
     def get_optimal_params(self, X_validate, y_validate):
         """
