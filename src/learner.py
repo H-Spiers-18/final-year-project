@@ -145,7 +145,6 @@ class PredictorLearner(Learner):
 
         Returns
         -------
-        2-tuple containing:
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
         """
         # get time in nanoseconds and convert to milliseconds
@@ -199,8 +198,7 @@ class TransferLearner(Learner):
 
         Returns
         -------
-        2-tuple containing:
-        DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
+        LinearRegression - untrained linear regressor containing the hyperparameters which exhibited the lowest MAPE
         """
         # get time in nanoseconds and convert to milliseconds
         start_time = time_ns()//1000000
