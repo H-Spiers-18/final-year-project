@@ -40,7 +40,7 @@ class Learner(ABC):
         ----------
         x_train: numpy.ndarray - array of training sample feature vectors
         y_train: numpy.ndarray - array of measured training sample performance values
-        premade_model: sklearn model - Optional parameter for an optimised model defined using cross validation
+        premade_model: sklearn model - Optional parameter for an optimised model defined by hyperparameter optimisation
 
         Returns
         -------
@@ -49,28 +49,13 @@ class Learner(ABC):
         pass
 
     @abstractmethod
-    def predict(self, x_test):
-        """
-        Predicts the performance value of one or more run-time configurations. Implemented in PredictorLearner and
-        TransferLearner
-        Parameters
-        ----------
-        x_test: numpy.ndarray - array of test sample feature vectors
-
-        Returns
-        -------
-        None
-        """
-        pass
-
-    @abstractmethod
-    def get_optimal_params(self, X_validate, y_validate):
+    def get_optimal_params(self, x_validate, y_validate):
         """
         Perform a grid search of all possible hyperparameter configurations with 5-fold cross validation and MAPE
         to find the best performing hyperparameter set. Implemented in PredictorLearner and TransferLearner
         Parameters
         ----------
-        X_validate: numpy.ndarray - array of validation set feature vectors
+        x_validate: numpy.ndarray - array of validation set feature vectors
         y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
@@ -100,10 +85,9 @@ class Learner(ABC):
                                    scoring=CrossValScoringMethods[measure].value)
 
         if measure == 'MAPE':
-            return (sum(cv_score)/len(cv_score))*-100#
+            return (sum(cv_score) / len(cv_score)) * -100
         else:
             return sum(cv_score) / len(cv_score)
-
 
     def get_training_time(self, include_optimisation_time=False):
         """
@@ -127,13 +111,19 @@ class PredictorLearner(Learner):
 
     def fit(self, x_train, y_train, premade_model=None):
         """
-        Implements abstract method. Fits data using a regression tree. For more info, see Learner.fit
+        Trains a machine learning model given one or more input samples and expected outcomes
+        Parameters
+        ----------
+        x_train: numpy.ndarray - array of training sample feature vectors
+        y_train: numpy.ndarray - array of measured training sample performance values
+        premade_model: sklearn model - Optional parameter for an optimised model defined by hyperparameter optimisation
+
         Returns
         -------
         None
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()//1000000
+        start_time = time_ns() // 1000000
         # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
@@ -141,42 +131,29 @@ class PredictorLearner(Learner):
             self.model = DecisionTreeRegressor()
         # train the model
         self.model.fit(x_train, y_train)
-        self.training_time = (time_ns()//1000000)-start_time
+        self.training_time = (time_ns() // 1000000) - start_time
 
-    def predict(self, x_test):
-        """
-        Implements abstract method. Predicts the performance value of one or more run-time configurations.
-        For more info, see learner.predict
-
-        Returns
-        -------
-        y_pred: numpy.ndarray - predicted performance values for each of the input samples
-        """
-        y_pred = self.model.predict(x_test)
-        return y_pred
-
-    def get_optimal_params(self, X_validate, y_validate):
+    def get_optimal_params(self, x_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
         5-fold cross validation and MAPE to find the best performing hyperparameter set.
         Parameters
         ----------
-        X_validate: numpy.ndarray - array of validation set feature vectors
+        x_validate: numpy.ndarray - array of validation set feature vectors
         y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
         -------
-        2-tuple containing:
         DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()//1000000
+        start_time = time_ns() // 1000000
         param_grid = constants.REGRESSION_TREE_PARAM_GRID
         temp_model = DecisionTreeRegressor()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
-        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
-        cv.fit(X_validate, y_validate)
-        self.param_optimisation_time = (time_ns()//1000000)-start_time
+        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring=constants.MAPE_SCORING)
+        cv.fit(x_validate, y_validate)
+        self.param_optimisation_time = (time_ns() // 1000000) - start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
 
@@ -187,13 +164,19 @@ class TransferLearner(Learner):
 
     def fit(self, x_train, y_train, premade_model=None):
         """
-        Implements abstract method fit(). Fits data using linear regression. For more info, see Learner.fit
+        Trains a machine learning model given one or more input samples and expected outcomes
+        Parameters
+        ----------
+        x_train: numpy.ndarray - array of training sample feature vectors
+        y_train: numpy.ndarray - array of measured training sample performance values
+        premade_model: sklearn model - Optional parameter for an optimised model defined by hyperparameter optimisation
+
         Returns
         -------
         None
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()//1000000
+        start_time = time_ns() // 1000000
         # check if hyperparameter-optimised model is provided by premade_model param
         if premade_model is not None:
             self.model = premade_model
@@ -201,41 +184,28 @@ class TransferLearner(Learner):
             self.model = LinearRegression()
         # train the model
         self.model.fit(x_train, y_train)
-        self.training_time = (time_ns()//1000000) - start_time
+        self.training_time = (time_ns() // 1000000) - start_time
 
-    def predict(self, x_test):
-        """
-        Implements abstract method predict(). Predicts the performance value of one or more run-time configurations.
-        For more info, see learner.predict
-
-        Returns
-        -------
-        y_pred: numpy.ndarray - predicted performance values for each of the input samples
-        """
-        y_pred = self.model.predict(x_test)
-        return y_pred
-
-    def get_optimal_params(self, X_validate, y_validate):
+    def get_optimal_params(self, x_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
         5-fold cross validation and MAPE to find the best performing hyperparameter set.
         Parameters
         ----------
-        X_validate: numpy.ndarray - array of validation set feature vectors
+        x_validate: numpy.ndarray - array of validation set feature vectors
         y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
         -------
-        2-tuple containing:
-        DecisionTreeRegressor - untrained regression tree containing the hyperparameters which exhibited the lowest MAPE
+        LinearRegression - untrained linear regressor containing the hyperparameters which exhibited the lowest MAPE
         """
         # get time in nanoseconds and convert to milliseconds
-        start_time = time_ns()//1000000
+        start_time = time_ns() // 1000000
         param_grid = constants.LINEAR_REGRESSION_PARAM_GRID
         temp_model = LinearRegression()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
-        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
-        cv.fit(X_validate, y_validate)
-        self.param_optimisation_time = (time_ns()//1000000) - start_time
+        cv = GridSearchCV(temp_model, param_grid, cv=5, scoring=constants.MAPE_SCORING)
+        cv.fit(x_validate, y_validate)
+        self.param_optimisation_time = (time_ns() // 1000000) - start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
