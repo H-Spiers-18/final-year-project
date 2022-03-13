@@ -15,6 +15,13 @@ class InvalidAccuracyMeasureException(Exception):
     pass
 
 
+class CrossValScoringMethods(Enum):
+    """Used to access the non-functional property boundary indexes for each subject system's dataset
+    (i.e. which column number does the configuration options stop and the non-functional property measurements begin)"""
+    MAPE = constants.MAPE_SCORING
+    MSE = constants.MSE_SCORING
+
+
 class Learner(ABC):
     """Abstract class for ML models. Contains the model itself and a number of results-gathering methods"""
 
