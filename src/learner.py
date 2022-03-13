@@ -40,7 +40,7 @@ class Learner(ABC):
         ----------
         x_train: numpy.ndarray - array of training sample feature vectors
         y_train: numpy.ndarray - array of measured training sample performance values
-        premade_model: sklearn model - Optional parameter for an optimised model defined using cross validation
+        premade_model: sklearn model - Optional parameter for an optimised model defined by hyperparameter optimisation
 
         Returns
         -------
@@ -112,7 +112,13 @@ class PredictorLearner(Learner):
 
     def fit(self, x_train, y_train, premade_model=None):
         """
-        Implements abstract method. Fits data using a regression tree. For more info, see Learner.fit
+        Trains a machine learning model given one or more input samples and expected outcomes
+        Parameters
+        ----------
+        x_train: numpy.ndarray - array of training sample feature vectors
+        y_train: numpy.ndarray - array of measured training sample performance values
+        premade_model: sklearn model - Optional parameter for an optimised model defined by hyperparameter optimisation
+
         Returns
         -------
         None
@@ -160,7 +166,13 @@ class TransferLearner(Learner):
 
     def fit(self, x_train, y_train, premade_model=None):
         """
-        Implements abstract method fit(). Fits data using linear regression. For more info, see Learner.fit
+        Trains a machine learning model given one or more input samples and expected outcomes
+        Parameters
+        ----------
+        x_train: numpy.ndarray - array of training sample feature vectors
+        y_train: numpy.ndarray - array of measured training sample performance values
+        premade_model: sklearn model - Optional parameter for an optimised model defined by hyperparameter optimisation
+
         Returns
         -------
         None
