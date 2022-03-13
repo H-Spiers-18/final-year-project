@@ -66,7 +66,7 @@ def get_random_datasets():
     return datasets
 
 
-def get_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, random_state=42):
+def split_transfer_dataset(d_src, d_target, train_size=0.8, validation_size=0.2, random_state=42):
     """
     Splits 2 datasets into a single train/test split for transfer learning between compile-time configurations
     Parameters
@@ -110,12 +110,11 @@ class Dataset:
 
     def __init__(self, csv_path, subject_system):
         self.csv_path = csv_path
-        self.dataset = self.__set_dataset(csv_path)
+        self.dataset = self.__set_dataset()
         self.__prepare_dataset(subject_system)
         self.features, self.values = self.__get_features_and_values(subject_system)
 
-    @staticmethod
-    def __set_dataset(csv_path):
+    def __set_dataset(self):
         """
         Reads dataset from csv file into a pandas dataframe
         Parameters
@@ -126,7 +125,7 @@ class Dataset:
         -------
         pandas.DataFrame - dataframe containing the dataset. read in the same column format as it is in the csv file
         """
-        return pd.read_csv(csv_path)
+        return pd.read_csv(self.csv_path)
 
     def get_dataset(self):
         """
@@ -173,8 +172,8 @@ class Dataset:
 
         Returns
         -------
-        xs: numpy.ndarray - 2d array containing feature vectors for all samples
-        ys: numpy.ndarray - 1d array containing all performance values
+        features: numpy.ndarray - 2d array containing feature vectors for all samples
+        values: numpy.ndarray - 1d array containing all performance values
         """
         cols = self.dataset.columns.values
         # grab the column index at which the configuration options stop and the non-functional property values begin

@@ -100,7 +100,7 @@ class Learner(ABC):
                                    scoring=CrossValScoringMethods[measure].value)
 
         if measure == 'MAPE':
-            return (sum(cv_score)/len(cv_score))*-100#
+            return (sum(cv_score) / len(cv_score)) * -100
         else:
             return sum(cv_score) / len(cv_score)
 
