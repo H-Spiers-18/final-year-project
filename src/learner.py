@@ -49,13 +49,13 @@ class Learner(ABC):
         pass
 
     @abstractmethod
-    def get_optimal_params(self, X_validate, y_validate):
+    def get_optimal_params(self, x_validate, y_validate):
         """
         Perform a grid search of all possible hyperparameter configurations with 5-fold cross validation and MAPE
         to find the best performing hyperparameter set. Implemented in PredictorLearner and TransferLearner
         Parameters
         ----------
-        X_validate: numpy.ndarray - array of validation set feature vectors
+        x_validate: numpy.ndarray - array of validation set feature vectors
         y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
@@ -134,13 +134,13 @@ class PredictorLearner(Learner):
         self.model.fit(x_train, y_train)
         self.training_time = (time_ns()//1000000)-start_time
 
-    def get_optimal_params(self, X_validate, y_validate):
+    def get_optimal_params(self, x_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
         5-fold cross validation and MAPE to find the best performing hyperparameter set.
         Parameters
         ----------
-        X_validate: numpy.ndarray - array of validation set feature vectors
+        x_validate: numpy.ndarray - array of validation set feature vectors
         y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
@@ -153,7 +153,7 @@ class PredictorLearner(Learner):
         temp_model = DecisionTreeRegressor()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
-        cv.fit(X_validate, y_validate)
+        cv.fit(x_validate, y_validate)
         self.param_optimisation_time = (time_ns()//1000000)-start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
@@ -187,13 +187,13 @@ class TransferLearner(Learner):
         self.model.fit(x_train, y_train)
         self.training_time = (time_ns()//1000000) - start_time
 
-    def get_optimal_params(self, X_validate, y_validate):
+    def get_optimal_params(self, x_validate, y_validate):
         """
         Implements abstract method. Perform a grid search of all possible hyperparameter configurations with
         5-fold cross validation and MAPE to find the best performing hyperparameter set.
         Parameters
         ----------
-        X_validate: numpy.ndarray - array of validation set feature vectors
+        x_validate: numpy.ndarray - array of validation set feature vectors
         y_validate: numpy.ndarray - array of validation set measured performance values
 
         Returns
@@ -206,7 +206,7 @@ class TransferLearner(Learner):
         temp_model = LinearRegression()
         # test out the performance every possible permutation of hyperparameters using 5-fold cross validation
         cv = GridSearchCV(temp_model, param_grid, cv=5, scoring='neg_mean_absolute_percentage_error')
-        cv.fit(X_validate, y_validate)
+        cv.fit(x_validate, y_validate)
         self.param_optimisation_time = (time_ns()//1000000) - start_time
         # return the estimator with the lowest error, along with the MAPE that that estimator achieved
         return cv.best_estimator_
