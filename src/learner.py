@@ -89,7 +89,6 @@ class Learner(ABC):
         else:
             return sum(cv_score) / len(cv_score)
 
-
     def get_training_time(self, include_optimisation_time=False):
         """
         Gets time taken to train the model
