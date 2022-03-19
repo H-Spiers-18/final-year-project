@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from time import time_ns
 from enum import Enum
 
+import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
@@ -78,16 +79,18 @@ class Learner(ABC):
         numpy.ndarray - contains the measured error of each input prediction value
         """
         measure = measure.upper()  # convert measure to uppercase to ensure it matches CrossValScoringMethods key
-        cv_score = cross_val_score(self.model,
-                                   xs,
-                                   ys,
-                                   cv=constants.CV_FOLDS,
-                                   scoring=CrossValScoringMethods[measure].value)
+        # calculate the accuracy of 5 cross-validation runs
+        cv_score = np.mean([cross_val_score(self.model,
+                                            xs,
+                                            ys,
+                                            cv=constants.CV_FOLDS,
+                                            scoring=CrossValScoringMethods[measure].value)
+                            for _ in range(constants.CV_RUNS)])
 
         if measure == 'MAPE':
-            return (sum(cv_score) / len(cv_score)) * -100
+            return cv_score * -100
         else:
-            return sum(cv_score) / len(cv_score)
+            return cv_score
 
     def get_training_time(self, include_optimisation_time=False):
         """

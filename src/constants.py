@@ -3,6 +3,9 @@
 # Cross validation number of folds
 CV_FOLDS = 5
 
+# Number of times to run cross validation to take avg accuracy
+CV_RUNS = 5
+
 # Experiment repetitions
 EXPERIMENT_REPS = 5
 
