@@ -30,6 +30,8 @@ def get_random_datasets():
     poppler_datasets = []
     x264_datasets = []
     xz_datasets = []
+    # set random number generator seed for experiment reproducibility
+    random.seed(0)
     for rep in range(constants.EXPERIMENT_REPS):
         # randomly select 2 datasets per subject system per experiment repetition
         nodejs_tgt_src = \

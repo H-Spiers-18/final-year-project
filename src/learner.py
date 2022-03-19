@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from time import time_ns
 from enum import Enum
 
-import numpy as np
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
+import numpy as np
 
 import constants
 
