@@ -1,5 +1,6 @@
 import os
 import random
+from time import time_ns
 from enum import Enum
 
 from sklearn.model_selection import train_test_split
@@ -19,19 +20,23 @@ class NFPropertyBoundaryIndexes(Enum):
     XZ = constants.XZ_NF_BOUNDARY
 
 
-def get_random_datasets():
+def get_random_datasets(reproducibility_mode=True):
     """
     Selects 2 random datasets for each subject system for each experiment repetition (without replacement)
     Returns
     -------
     datasets: dict of Dataset - A tuple for each subject system, each with a source and target dataset (8 in total)
+    reproducibility_mode: bool - Whether or not to set a constant seed to select the same dataset each time
     """
     nodejs_datasets = []
     poppler_datasets = []
     x264_datasets = []
     xz_datasets = []
     # set random number generator seed for experiment reproducibility
-    random.seed(0)
+    if reproducibility_mode:
+        random.seed(0)
+    else:
+        random.seed(time_ns() % 2**32)
     for rep in range(constants.EXPERIMENT_REPS):
         # randomly select 2 datasets per subject system per experiment repetition
         nodejs_tgt_src = \
