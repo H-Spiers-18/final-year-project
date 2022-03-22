@@ -7,7 +7,7 @@ CV_FOLDS = 5
 CV_RUNS = 5
 
 # Experiment repetitions
-EXPERIMENT_REPS = 5
+EXPERIMENT_REPS = 25
 
 # Dataset folder paths
 NODEJS_PATH = '../dataset/nodejs'
