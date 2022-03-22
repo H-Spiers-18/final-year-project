@@ -49,3 +49,34 @@ def get_cliffs_delta(s1, s2):
 
     z = abs(less_than_count - greater_than_count) / (len(s1) * len(s2))
     return z
+
+
+def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
+    """
+    Add Wilcoxon's p value and cliff's delta as a footer to the given csv file
+    Parameters
+    ----------
+    wilcox_p: list - results' wilcoxon p value(s) (with and optionally without cross validation)
+    cliffs_delta: float - results' cliff's delta value(s) (with and optionally without cross validation)
+    csv_path: str - path to the results csv file
+    rq: int - which research question the csv belongs to
+
+    Returns
+    -------
+    None
+    """
+    with open(csv_path, 'a') as results_file:
+        if rq == 1 or rq == 2:
+            results_file.write(
+                '\n' + 'Wilcoxon p value: ' + str(wilcox_p[0]) + '\n' +
+                'Cliff\'s delta: ' + str(cliffs_delta[0]))
+            results_file.close()
+
+        elif rq == 3:
+            results_file.write(
+                '\n' + 'Wilcoxon p value CV: ' + str(wilcox_p[0]) + '\n' +
+                'Cliff\'s delta CV: ' + str(cliffs_delta[0]))
+            results_file.write(
+                '\n' + 'Wilcoxon p value no CV: ' + str(wilcox_p[1]) + '\n' +
+                'Cliff\'s delta no CV: ' + str(cliffs_delta[1]))
+            results_file.close()
