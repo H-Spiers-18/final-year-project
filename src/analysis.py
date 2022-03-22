@@ -19,7 +19,7 @@ def get_wilcoxon_p_value(s1, s2):
     return p
 
 
-def cliffs_delta(s1, s2):
+def get_cliffs_delta(s1, s2):
     """
     Performs the Cliff's delta test to determine the effect size of my measurements. Based on the following link's
     implementation, just written to efficiently use numpy arrays - https://github.com/txt/ase16/blob/master/doc/stats.md
@@ -36,6 +36,12 @@ def cliffs_delta(s1, s2):
                0.474 <= z - large effect size
                (see figure 11 in report, based on D. Chen et. al [31])
     """
+    # ensure that the 2 samples are numpy arrays
+    if type(s1) != np.ndarray:
+        s1 = np.array(s1)
+    if type(s2) != np.ndarray:
+        s2 = np.array(s2)
+
     less_than_count = greater_than_count = 0
     for x in s1:
         greater_than_count += np.sum(s2 > x)
