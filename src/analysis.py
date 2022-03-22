@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from scipy.stats import wilcoxon
 
@@ -49,6 +51,34 @@ def get_cliffs_delta(s1, s2):
 
     z = abs(less_than_count - greater_than_count) / (len(s1) * len(s2))
     return z
+
+
+def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
+    """
+    Save results to csv file
+    Parameters
+    ----------
+    results: pd.DataFrame - DataFrame containing recorded results
+    subject_system: str - subject system that the results belong to
+    wilcox_p: list - results' wilcoxon p value(s) (with and optionally without cross validation)
+    cliffs_delta: float - results' cliff's delta value(s) (with and optionally without cross validation)
+    rq: int - which research question the csv belongs to
+
+    Returns
+    -------
+    None
+    """
+    csv_filename = 'rq'+str(rq)+'.csv'
+    output_dir = os.path.join('../results/', subject_system.lower())
+    csv_path = os.path.join(output_dir, csv_filename)
+
+    print('Writing output to', csv_path, '\n')
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    results.to_csv(csv_path, index=False)
+    add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq)
+    print('Output written to', csv_path, '\n')
 
 
 def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
