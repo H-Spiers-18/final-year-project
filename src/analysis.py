@@ -1,7 +1,10 @@
 import os
 
 import numpy as np
+import pandas as pd
 from scipy.stats import wilcoxon
+
+import constants
 
 
 def get_wilcoxon_p_value(s1, s2):
@@ -110,3 +113,18 @@ def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
                 '\n' + 'Wilcoxon p value no CV: ' + str(wilcox_p[1]) + '\n' +
                 'Cliff\'s delta no CV: ' + str(cliffs_delta[1]))
             results_file.close()
+
+
+def read_results_csv(csv_path):
+    """
+    Read results (without p values) from csv to pandas dataframe
+    Parameters
+    ----------
+    csv_path: str - path to the results csv
+
+    Returns
+    -------
+    results: pd.DataFrame - dataframe containing experiment results
+    """
+    results = pd.read_csv(csv_path)[:constants.EXPERIMENT_REPS]
+    return results
