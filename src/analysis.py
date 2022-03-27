@@ -128,3 +128,20 @@ def read_results_csv(csv_path):
     """
     results = pd.read_csv(csv_path)[:constants.EXPERIMENT_REPS]
     return results
+
+
+def get_mean_and_minmax(results):
+    """
+    Gets the mean, minimum, and maximum values for each results column
+    Parameters
+    ----------
+    results: pd.DataFrame - dataframe containing experiment results
+
+    Returns
+    -------
+    tuple(mean, min, max)  - contains mean, min and max values from each results column
+    """
+    mean = results.mean()
+    min = results.min()
+    max = results.max()
+    return (mean, min, max)
