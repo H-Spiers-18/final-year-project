@@ -1,4 +1,5 @@
 import os
+import itertools
 
 import numpy as np
 import pandas as pd
@@ -127,7 +128,7 @@ def read_results_csv(csv_path):
     results: pd.DataFrame - dataframe containing experiment results
     """
     results = pd.read_csv(csv_path)[:constants.EXPERIMENT_REPS]
-    return results
+    return results.astype(np.float64)
 
 
 def get_mean_and_minmax(results):
@@ -141,7 +142,27 @@ def get_mean_and_minmax(results):
     -------
     tuple(mean, min, max)  - contains mean, min and max values from each results column
     """
-    mean = results.mean()
-    min = results.min()
-    max = results.max()
-    return (mean, min, max)
+    cols = results.columns
+    out = pd.DataFrame()
+    results = np.abs(results)
+    for col in cols:
+        mean = np.mean(results[col])
+        _min = np.min(results[col])
+        _max = np.max(results[col])
+        out[col] = [mean, _min, _max]
+
+    return out
+
+
+def analyse_results():
+    """
+    Perform analysis of all results csv files and output analysis to csv files
+    Returns
+    -------
+    None
+    """
+    input_dirs = list(itertools.product(constants.SUBJECT_SYSTEMS, constants.RQ_CSV_NAMES))
+    output_dirs = list(itertools.product(constants.SUBJECT_SYSTEMS, constants.RQ_ANALYSIS_FOLDERS))
+    all_results = []
+
+
