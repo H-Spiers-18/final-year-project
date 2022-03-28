@@ -9,6 +9,15 @@ CV_RUNS = 5
 # Experiment repetitions
 EXPERIMENT_REPS = 25
 
+# Subject system names
+SUBJECT_SYSTEMS = ['nodejs', 'x264', 'xz']
+
+# RQ analysis folders
+RQ_ANALYSIS_FOLDERS = ['rq1_analysis', 'rq2_analysis', 'rq3_analysis']
+
+# RQ csv names
+RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
+
 # Dataset folder paths
 NODEJS_PATH = '../dataset/nodejs'
 POPPLER_PATH = '../dataset/poppler'
