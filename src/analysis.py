@@ -134,7 +134,7 @@ def read_results_csv(csv_path):
     return results.astype(np.float64)
 
 
-def get_mean_and_minmax(results):
+def get_mean_min_max(results):
     """
     Gets the mean, minimum, and maximum values for each results column
     Parameters
@@ -170,7 +170,7 @@ def write_mean_min_max():
         for subject_system_path in constants.SUBJECT_SYSTEM_PATHS:
             results_csv = os.path.join(subject_system_path, rq_csv)
             results = read_results_csv(results_csv)
-            mean_min_max_dfs.append(get_mean_and_minmax(results))
+            mean_min_max_dfs.append(get_mean_min_max(results))
 
         # combine all subject systems' results into a single dataframe
         out = pd.concat(mean_min_max_dfs, ignore_index=True)

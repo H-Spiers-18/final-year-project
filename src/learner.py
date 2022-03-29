@@ -104,6 +104,9 @@ class Learner(ABC):
         else:
             return self.training_time
 
+    def get_model(self):
+        return self.model
+
 
 class PredictorLearner(Learner):
     """Class for training and using a model for predicting the performance values for run-time configurations using a
