@@ -6,6 +6,10 @@ from scipy.stats import wilcoxon
 
 import constants
 
+for folder in constants.RQ_ANALYSIS_FOLDERS:
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
 
 def get_wilcoxon_p_value(s1, s2):
     """
@@ -175,7 +179,5 @@ def analyse_results():
                               'x264 mean', 'x264 min', 'x264 max',
                               'xz mean', 'xz min', 'xz max']
 
-        # create output folder if it doesn't exist and write analysis to csv
-        if not os.path.exists(rq_analysis_folder):
-            os.makedirs(rq_analysis_folder)
+        # write analysis to csv
         out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
