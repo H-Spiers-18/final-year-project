@@ -13,10 +13,12 @@ EXPERIMENT_REPS = 25
 SUBJECT_SYSTEM_PATHS = ['../results/nodejs', '../results/x264', '../results/xz']
 
 # RQ analysis folders
-RQ_ANALYSIS_FOLDERS = ['rq1_analysis', 'rq2_analysis', 'rq3_analysis']
+RQ_ANALYSIS_FOLDERS = ['../results/_analysis/rq1_analysis',
+                       '../results/_analysis/rq2_analysis',
+                       '../results/_analysis/rq3_analysis']
 
 # RQ csv names
-RQ_CSV_PATHS = ['rq1.csv', 'rq2.csv', 'rq3.csv']
+RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
 
 # Dataset folder paths
 NODEJS_PATH = '../dataset/nodejs'
