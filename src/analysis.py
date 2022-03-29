@@ -157,7 +157,7 @@ def get_mean_and_minmax(results):
     return out
 
 
-def analyse_results():
+def write_mean_min_max():
     """
     Perform analysis of all results csv files and output analysis to csv files
     Returns
