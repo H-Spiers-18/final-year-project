@@ -1,4 +1,5 @@
 import os
+import itertools
 
 import numpy as np
 import pandas as pd
@@ -127,7 +128,7 @@ def read_results_csv(csv_path):
     results: pd.DataFrame - dataframe containing experiment results
     """
     results = pd.read_csv(csv_path)[:constants.EXPERIMENT_REPS]
-    return results
+    return results.astype(np.float64)
 
 
 def get_mean_and_minmax(results):
@@ -141,7 +142,41 @@ def get_mean_and_minmax(results):
     -------
     tuple(mean, min, max)  - contains mean, min and max values from each results column
     """
-    mean = results.mean()
-    min = results.min()
-    max = results.max()
-    return (mean, min, max)
+    cols = results.columns
+    out = pd.DataFrame()
+    results = np.abs(results)
+    for col in cols:
+        mean = np.mean(results[col])
+        _min = np.min(results[col])
+        _max = np.max(results[col])
+        out[col] = [mean, _min, _max]
+
+    return out
+
+
+def analyse_results():
+    """
+    Perform analysis of all results csv files and output analysis to csv files
+    Returns
+    -------
+    None
+    """
+    for rq_csv, rq_analysis_folder in zip(constants.RQ_CSV_NAMES, constants.RQ_ANALYSIS_FOLDERS):
+        mean_min_max_dfs = []
+        # get the mean, min and max values from each research question results csv file
+        for subject_system_path in constants.SUBJECT_SYSTEM_PATHS:
+            results_csv = os.path.join(subject_system_path, rq_csv)
+            results = read_results_csv(results_csv)
+            mean_min_max_dfs.append(get_mean_and_minmax(results))
+
+        # combine all subject systems' results into a single dataframe
+        out = pd.concat(mean_min_max_dfs, ignore_index=True)
+        # label each row to enhance readability
+        out['measurement'] = ['nodejs mean', 'nodejs min', 'nodejs max',
+                              'x264 mean', 'x264 min', 'x264 max',
+                              'xz mean', 'xz min', 'xz max']
+
+        # create output folder if it doesn't exist and write analysis to csv
+        if not os.path.exists(rq_analysis_folder):
+            os.makedirs(rq_analysis_folder)
+        out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
