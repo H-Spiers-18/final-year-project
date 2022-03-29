@@ -105,6 +105,12 @@ class Learner(ABC):
             return self.training_time
 
     def get_model(self):
+        """
+        Gets the current model
+        Returns
+        -------
+        sklearn model - Model currently in use by Learner instance
+        """
         return self.model
 
 
