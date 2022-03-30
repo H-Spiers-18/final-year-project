@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
 import constants
@@ -181,3 +182,17 @@ def write_mean_min_max():
 
         # write analysis to csv
         out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
+
+
+def visualise_transfer_model(model, x_train, y_train):
+    """
+    Visualises transfer model as a matplotlib scatter plot. Scatter plot shows test data points,
+    line shows transfer model. Saves plot to file
+    Parameters
+    ----------
+    model: sklearn.LinearRegression - Fitted transfer model
+
+    Returns
+    -------
+    None
+    """
