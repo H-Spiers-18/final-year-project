@@ -195,18 +195,18 @@ def make_box_plots(rq):
     box_plot_data = []
     rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_FOLDERS[rq]
     box_plot_fields = constants.BOX_PLOT_FIELDS[rq]
+    box_plot_filename_descriptions = constants.BOX_PLOT_DESCRIPTIONS[rq]
     # get the mean, min and max values from each research question results csv file
     for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS):
         results_csv = os.path.join(subject_system_path, rq_csv)
         results = read_results_csv(results_csv)
-        for fields in box_plot_fields:
-            #print(results[fields].values)
+        for fields, box_plot_description in zip(box_plot_fields, box_plot_filename_descriptions):
             box_plot_data = results[fields].values
 
             fig, ax = plt.subplots()
             ax.set_title(subject_system)
             ax.boxplot(box_plot_data, showfliers=False)
-            plt.savefig(os.path.join(rq_analysis_folder, subject_system+'_box_plot.png'))
+            plt.savefig(os.path.join(rq_analysis_folder, box_plot_description+subject_system+'_box_plot.png'))
 
             # create output folder if it doesn't exist and write analysis to csv
             if not os.path.exists(rq_analysis_folder):
