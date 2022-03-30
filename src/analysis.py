@@ -200,12 +200,13 @@ def make_box_plots(rq):
     for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS):
         results_csv = os.path.join(subject_system_path, rq_csv)
         results = read_results_csv(results_csv)
+
         for fields, box_plot_description in zip(box_plot_fields, box_plot_filename_descriptions):
             box_plot_data = results[fields].values
-
             fig, ax = plt.subplots()
             ax.set_title(subject_system)
             ax.boxplot(box_plot_data, showfliers=False)
+            ax.set_xticklabels(fields)
             plt.savefig(os.path.join(rq_analysis_folder, box_plot_description+subject_system+'_box_plot.png'))
 
             # create output folder if it doesn't exist and write analysis to csv
