@@ -155,32 +155,32 @@ def get_mean_and_minmax(results):
     return out
 
 
-def analyse_results():
+def write_mean_min_max(rq):
     """
     Perform analysis of all results csv files and output analysis to csv files
     Returns
     -------
     None
     """
-    for rq_csv, rq_analysis_folder in zip(constants.RQ_CSV_NAMES, constants.RQ_ANALYSIS_FOLDERS):
-        mean_min_max_dfs = []
-        # get the mean, min and max values from each research question results csv file
-        for subject_system_path in constants.SUBJECT_SYSTEM_PATHS:
-            results_csv = os.path.join(subject_system_path, rq_csv)
-            results = read_results_csv(results_csv)
-            mean_min_max_dfs.append(get_mean_and_minmax(results))
+    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_FOLDERS[rq]
+    mean_min_max_dfs = []
+    # get the mean, min and max values from each research question results csv file
+    for subject_system_path in constants.SUBJECT_SYSTEM_PATHS:
+        results_csv = os.path.join(subject_system_path, rq_csv)
+        results = read_results_csv(results_csv)
+        mean_min_max_dfs.append(get_mean_and_minmax(results))
 
-        # combine all subject systems' results into a single dataframe
-        out = pd.concat(mean_min_max_dfs, ignore_index=True)
-        # label each row to enhance readability
-        out['measurement'] = ['nodejs mean', 'nodejs min', 'nodejs max',
-                              'x264 mean', 'x264 min', 'x264 max',
-                              'xz mean', 'xz min', 'xz max']
+    # combine all subject systems' results into a single dataframe
+    out = pd.concat(mean_min_max_dfs, ignore_index=True)
+    # label each row to enhance readability
+    out['measurement'] = ['nodejs mean', 'nodejs min', 'nodejs max',
+                          'x264 mean', 'x264 min', 'x264 max',
+                          'xz mean', 'xz min', 'xz max']
 
-        # create output folder if it doesn't exist and write analysis to csv
-        if not os.path.exists(rq_analysis_folder):
-            os.makedirs(rq_analysis_folder)
-        out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
+    # create output folder if it doesn't exist and write analysis to csv
+    if not os.path.exists(rq_analysis_folder):
+        os.makedirs(rq_analysis_folder)
+    out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
 
 
 def make_box_plots(rq, show_outliers=False):
