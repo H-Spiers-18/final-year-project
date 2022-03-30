@@ -74,8 +74,6 @@ INVALID_ACCURACY_MEASURE_MSG = 'Invalid accuracy measure parameter. Available me
 
 MAX_DEPTH = list(range(3, 30)) + [None]
 MIN_SAMPLES_SPLIT = list(range(2, 10))
-MIN_WEIGHT_FRACTION_LEAF = [x*0.1 for x in range(0, 5)]
-MAX_FEATURES = ['auto', 'sqrt', 'log2']
 
 REGRESSION_TREE_PARAM_GRID = {'max_depth': MAX_DEPTH,
                               'min_samples_split': MIN_SAMPLES_SPLIT}
