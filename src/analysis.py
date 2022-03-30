@@ -210,9 +210,9 @@ def make_box_plots(rq, show_outliers=False):
         for fields, box_plot_description in zip(box_plot_fields, box_plot_filename_descriptions):
             # plot results in box plot
             fig, ax = plt.subplots()
-            fig.tight_layout()
             ax.boxplot(results[fields].values, showfliers=show_outliers)
             ax.set_title(subject_system)
             ax.set_ylabel(y_label, fontsize=16)
             ax.set_xticklabels(fields, fontsize=12, rotation=30, horizontalalignment='right')
-            plt.savefig(os.path.join(rq_analysis_folder, box_plot_description + subject_system + '_box_plot.png'))
+            plt.savefig(os.path.join(rq_analysis_folder, box_plot_description + subject_system + '_box_plot.png'),
+                        bbox_inches='tight')
