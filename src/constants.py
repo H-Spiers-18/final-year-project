@@ -35,6 +35,9 @@ BOX_PLOT_DESCRIPTIONS = [['mape_error_optimised_', 'mape_error_unoptimised_'],
                          ['mape_error_transfer_model_', 'mape_error_predictor_model_'],
                          ['training_time_transfer_model_', 'training_time_predictor_model_']]
 
+# y axis labels for matplotlib plots
+Y_AXIS_LABELS = ['MAPE error (%)', 'MAPE error (%)', 'Training time (ms)']
+
 # Dataset folder paths
 NODEJS_PATH = '../dataset/nodejs'
 POPPLER_PATH = '../dataset/poppler'

@@ -195,10 +195,12 @@ def make_box_plots(rq, show_outliers=False):
     -------
     None
     """
-    rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions = constants.RQ_CSV_NAMES[rq], \
-                                                                                  constants.RQ_ANALYSIS_FOLDERS[rq], \
-                                                                                  constants.BOX_PLOT_FIELDS[rq], \
-                                                                                  constants.BOX_PLOT_DESCRIPTIONS[rq]
+    rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions, y_label = \
+        constants.RQ_CSV_NAMES[rq], \
+        constants.RQ_ANALYSIS_FOLDERS[rq], \
+        constants.BOX_PLOT_FIELDS[rq], \
+        constants.BOX_PLOT_DESCRIPTIONS[rq], \
+        constants.Y_AXIS_LABELS[rq]
 
     # loop through each subject system for each box plot
     for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS):
@@ -211,6 +213,7 @@ def make_box_plots(rq, show_outliers=False):
             fig.tight_layout()
             ax.boxplot(results[fields].values, showfliers=show_outliers)
             ax.set_title(subject_system)
-            ax.set_xticklabels(fields)
-            plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right')
+            ax.set_ylabel(y_label, fontsize=16)
+            ax.set_xticklabels(fields, fontsize=12)
+            plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right') # rotate labels to prevent overlap
             plt.savefig(os.path.join(rq_analysis_folder, box_plot_description + subject_system + '_box_plot.png'))
