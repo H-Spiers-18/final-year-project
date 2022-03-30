@@ -183,29 +183,34 @@ def analyse_results():
         out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
 
 
-def make_box_plots():
+def make_box_plots(rq):
     """
     Creates a box plot for the data from each research question and writes to file
     Returns
     -------
     None
     """
+    # convert research question number to index
+    rq -= 1
     box_plot_data = []
-    for rq_csv, rq_analysis_folder in zip(constants.RQ_CSV_NAMES, constants.RQ_ANALYSIS_FOLDERS):
-        rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[0], constants.RQ_ANALYSIS_FOLDERS[0]
-        # get the mean, min and max values from each research question results csv file
-        for subject_system_path in constants.SUBJECT_SYSTEM_PATHS:
-            results_csv = os.path.join(subject_system_path, rq_csv)
-            results = read_results_csv(results_csv)
+    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_FOLDERS[rq]
+    box_plot_fields = constants.BOX_PLOT_FIELDS[rq]
+    # get the mean, min and max values from each research question results csv file
+    for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS):
+        results_csv = os.path.join(subject_system_path, rq_csv)
+        results = read_results_csv(results_csv)
+        for fields in box_plot_fields:
+            #print(results[fields].values)
+            box_plot_data = results[fields].values
 
-            box_plot_data.append(results['mape_accuracy_trans_cv'])
-            box_plot_data.append(results['mape_accuracy_tgt_cv'])
+            fig, ax = plt.subplots()
+            ax.set_title(subject_system)
+            ax.boxplot(box_plot_data, showfliers=False)
+            plt.savefig(os.path.join(rq_analysis_folder, subject_system+'_box_plot.png'))
 
             # create output folder if it doesn't exist and write analysis to csv
             if not os.path.exists(rq_analysis_folder):
                 os.makedirs(rq_analysis_folder)
-            fig, ax = plt.subplots()
-            ax.set_title(subject_system_path)
-            ax.boxplot(box_plot_data, showfliers=False)
-            plt.savefig(os.path.join(rq_analysis_folder, 'box_plot.png'))
-            box_plot_data = []
+
+        print(box_plot_data)
+        box_plot_data = []
