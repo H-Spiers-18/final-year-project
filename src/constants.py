@@ -20,6 +20,13 @@ RQ_ANALYSIS_FOLDERS = ['../results/_analysis/rq1_analysis',
 # RQ csv names
 RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
 
+# Results fields to use in each RQ's box plot
+BOX_PLOT_FIELDS = [[['mape_accuracy_trans_cv', 'mape_accuracy_tgt_cv'], ['mape_accuracy_trans_cv', 'mape_accuracy_tgt_cv']],
+                   [['mape_accuracy_trans_20pct', 'mape_accuracy_trans_40pct', 'mape_accuracy_trans_60pct', 'mape_accuracy_trans_80pct'],
+                    ['mape_accuracy_pred_20pct', 'mape_accuracy_pred_40pct', 'mape_accuracy_pred_60pct', 'mape_accuracy_pred_80pct']],
+                   [['training_time_trans_20pct_cv', 'training_time_trans_40pct_cv', 'training_time_trans_60pct_cv', 'training_time_trans_80pct_cv'],
+                    ['training_time_pred_20pct_cv', 'training_time_pred_40pct_cv', 'training_time_pred_60pct_cv', 'training_time_pred_80pct_cv']]]
+
 # Dataset folder paths
 NODEJS_PATH = '../dataset/nodejs'
 POPPLER_PATH = '../dataset/poppler'
