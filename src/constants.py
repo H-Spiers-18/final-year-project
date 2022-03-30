@@ -9,6 +9,9 @@ CV_RUNS = 5
 # Experiment repetitions
 EXPERIMENT_REPS = 25
 
+# Subject systems
+SUBJECT_SYSTEMS = ['nodejs', 'x264', 'xz']
+
 # Subject system paths
 SUBJECT_SYSTEM_PATHS = ['../results/nodejs', '../results/x264', '../results/xz']
 
@@ -21,7 +24,7 @@ RQ_ANALYSIS_FOLDERS = ['../results/_analysis/rq1_analysis',
 RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
 
 # Results fields to use in each RQ's box plot
-BOX_PLOT_FIELDS = [[['mape_accuracy_trans_cv', 'mape_accuracy_tgt_cv'], ['mape_accuracy_trans_cv', 'mape_accuracy_tgt_cv']],
+BOX_PLOT_FIELDS = [[['mape_accuracy_trans_cv', 'mape_accuracy_tgt_cv'], ['mape_accuracy_trans_no_cv', 'mape_accuracy_tgt_no_cv']],
                    [['mape_accuracy_trans_20pct', 'mape_accuracy_trans_40pct', 'mape_accuracy_trans_60pct', 'mape_accuracy_trans_80pct'],
                     ['mape_accuracy_pred_20pct', 'mape_accuracy_pred_40pct', 'mape_accuracy_pred_60pct', 'mape_accuracy_pred_80pct']],
                    [['training_time_trans_20pct_cv', 'training_time_trans_40pct_cv', 'training_time_trans_60pct_cv', 'training_time_trans_80pct_cv'],
