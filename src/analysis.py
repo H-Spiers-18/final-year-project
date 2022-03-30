@@ -1,5 +1,4 @@
 import os
-import itertools
 
 import numpy as np
 import pandas as pd
@@ -7,6 +6,10 @@ import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
 import constants
+
+for path in constants.RQ_ANALYSIS_FOLDERS + constants.SUBJECT_SYSTEM_PATHS:
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 def get_wilcoxon_p_value(s1, s2):
