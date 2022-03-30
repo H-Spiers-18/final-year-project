@@ -158,6 +158,10 @@ def get_mean_and_minmax(results):
 def write_mean_min_max(rq):
     """
     Perform analysis of all results csv files and output analysis to csv files
+    Parameters
+    ----------
+    rq: int - numbers representing the research question results currently being analysed
+
     Returns
     -------
     None
