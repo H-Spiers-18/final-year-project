@@ -76,13 +76,8 @@ def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
     -------
     None
     """
-    csv_filename = 'rq' + str(rq) + '.csv'
-    output_dir = os.path.join('../results/', subject_system.lower())
+    csv_filename, output_dir = constants.RQ_CSV_NAMES[rq-1], constants.SUBJECT_SYSTEM_PATHS[rq-1]
     csv_path = os.path.join(output_dir, csv_filename)
-
-    print('Writing output to', csv_path, '\n')
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
     results.to_csv(csv_path, index=False)
     add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq)
