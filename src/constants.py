@@ -23,6 +23,11 @@ RQ_ANALYSIS_FOLDERS = ['../results/_analysis/rq1_analysis',
 # RQ csv names
 RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
 
+# Mean min max output csv row descriptions
+MEAN_MIN_MAX_ROW_DESCRIPTIONS = ['nodejs mean', 'nodejs min', 'nodejs max',
+                                 'x264 mean', 'x264 min', 'x264 max',
+                                 'xz mean', 'xz min', 'xz max']
+
 # Results fields to use in each RQ's box plot
 BOX_PLOT_FIELDS = [[['mape_accuracy_trans_cv', 'mape_accuracy_tgt_cv'], ['mape_accuracy_trans_no_cv', 'mape_accuracy_tgt_no_cv']],
                    [['mape_accuracy_trans_20pct', 'mape_accuracy_trans_40pct', 'mape_accuracy_trans_60pct', 'mape_accuracy_trans_80pct'],
