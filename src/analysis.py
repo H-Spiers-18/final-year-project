@@ -3,6 +3,7 @@ import itertools
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
 import constants
@@ -72,7 +73,7 @@ def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
     -------
     None
     """
-    csv_filename = 'rq'+str(rq)+'.csv'
+    csv_filename = 'rq' + str(rq) + '.csv'
     output_dir = os.path.join('../results/', subject_system.lower())
     csv_path = os.path.join(output_dir, csv_filename)
 
@@ -180,3 +181,38 @@ def analyse_results():
         if not os.path.exists(rq_analysis_folder):
             os.makedirs(rq_analysis_folder)
         out.to_csv(os.path.join(rq_analysis_folder, 'mean_min_max.csv'))
+
+
+def make_box_plots(rq, show_outliers=False):
+    """
+    Creates a box plot for the data from each research question and writes to file
+    Parameters
+    ----------
+    rq: int - numbers representing the research question results currently being analysed
+    show_outliers: bool - determines whether or not to include outliers in the box plot
+
+    Returns
+    -------
+    None
+    """
+    rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions, y_label = \
+        constants.RQ_CSV_NAMES[rq], \
+        constants.RQ_ANALYSIS_FOLDERS[rq], \
+        constants.BOX_PLOT_FIELDS[rq], \
+        constants.BOX_PLOT_DESCRIPTIONS[rq], \
+        constants.Y_AXIS_LABELS[rq]
+
+    # loop through each subject system for each box plot
+    for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS):
+        results_csv = os.path.join(subject_system_path, rq_csv)
+        results = read_results_csv(results_csv)
+
+        for fields, box_plot_description in zip(box_plot_fields, box_plot_filename_descriptions):
+            # plot results in box plot
+            fig, ax = plt.subplots()
+            ax.boxplot(results[fields].values, showfliers=show_outliers)
+            ax.set_title(box_plot_description[:-1] + ' - ' + subject_system)
+            ax.set_ylabel(y_label, fontsize=16)
+            ax.set_xticklabels(fields, fontsize=12, rotation=30, horizontalalignment='right')
+            plt.savefig(os.path.join(rq_analysis_folder, box_plot_description + subject_system + '_box_plot.png'),
+                        bbox_inches='tight')
