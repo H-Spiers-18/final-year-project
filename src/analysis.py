@@ -7,6 +7,7 @@ from scipy.stats import wilcoxon
 
 import constants
 
+# create output folders when this module is imported if they don't exist already
 for path in constants.RQ_ANALYSIS_FOLDERS + constants.SUBJECT_SYSTEM_PATHS:
     if not os.path.exists(path):
         os.makedirs(path)
