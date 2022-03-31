@@ -8,7 +8,8 @@ from scipy.stats import wilcoxon
 import constants
 
 # create output folders when this module is imported if they don't exist already
-for path in constants.RQ_ANALYSIS_FOLDERS + constants.SUBJECT_SYSTEM_PATHS:
+output_dirs = constants.RQ_ANALYSIS_PATHS + constants.SUBJECT_SYSTEM_PATHS + constants.SCATTER_PLOT_PATHS
+for path in output_dirs:
     if not os.path.exists(path):
         os.makedirs(path)
 
@@ -165,7 +166,7 @@ def write_mean_min_max(rq):
     -------
     None
     """
-    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_FOLDERS[rq]
+    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_PATHS[rq]
     mean_min_max_dfs = []
 
     # get the mean, min and max values from each research question results csv file
@@ -195,7 +196,7 @@ def make_box_plots(rq, show_outliers=False):
     """
     rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions, y_label = \
         constants.RQ_CSV_NAMES[rq], \
-        constants.RQ_ANALYSIS_FOLDERS[rq], \
+        constants.RQ_ANALYSIS_PATHS[rq], \
         constants.BOX_PLOT_FIELDS[rq], \
         constants.BOX_PLOT_DESCRIPTIONS[rq], \
         constants.Y_AXIS_LABELS[rq]
