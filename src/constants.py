@@ -16,9 +16,14 @@ SUBJECT_SYSTEMS = ['nodejs', 'x264', 'xz']
 SUBJECT_SYSTEM_PATHS = ['../results/nodejs', '../results/x264', '../results/xz']
 
 # RQ analysis folders
-RQ_ANALYSIS_FOLDERS = ['../results/_analysis/rq1_analysis',
+RQ_ANALYSIS_PATHS = ['../results/_analysis/rq1_analysis',
                        '../results/_analysis/rq2_analysis',
                        '../results/_analysis/rq3_analysis']
+
+# Folders to contain transfer model scatter plots
+SCATTER_PLOT_PATHS = ['../results/_analysis/rq1_analysis/transfer_model_scatter_plots',
+                        '../results/_analysis/rq2_analysis/transfer_model_scatter_plots',
+                        '../results/_analysis/rq3_analysis/transfer_model_scatter_plots']
 
 # RQ csv names
 RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
