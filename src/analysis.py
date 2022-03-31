@@ -239,5 +239,6 @@ def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error, ex
     fig, ax = plt.subplots()
     ax.scatter(x_train, y_train)
     ax.plot(x_train, model.predict(x_train))
+    ax.set_title(str(mape_error))
     plt.savefig(os.path.join(output_dir, 'rep_'+str(experiment_rep)+'.png'))
     plt.close()
