@@ -8,7 +8,9 @@ from scipy.stats import wilcoxon
 import constants
 
 # create output folders when this module is imported if they don't exist already
-output_dirs = constants.RQ_ANALYSIS_PATHS + constants.SUBJECT_SYSTEM_PATHS + constants.SCATTER_PLOT_PATHS
+output_dirs = constants.RQ_ANALYSIS_PATHS + \
+              constants.SUBJECT_SYSTEM_PATHS + \
+              [y for l in constants.SCATTER_PLOT_PATHS.values() for y in l]  # flatten into 1d list
 for path in output_dirs:
     if not os.path.exists(path):
         os.makedirs(path)
@@ -217,7 +219,7 @@ def make_box_plots(rq, show_outliers=False):
                         bbox_inches='tight')
 
 
-def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error):
+def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error, experiment_rep, subject_system):
     """
     Creates and writes a scatter plot containing the source and target data points and linear regression model line
     Parameters
@@ -227,8 +229,14 @@ def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error):
     y_train: numpy.ndarray - Target compile-time configuration performance measurements
     rq: int - Number representing the research question results currently being analysed
     mape_error: float - Cross-validation MAPE error (not the error between the model and plotted data)
+    experiment_rep: int - Current experiment repetition
 
     Returns
     -------
     None
     """
+    output_dir = constants.SCATTER_PLOT_PATHS[subject_system.lower()][rq-1]
+    fig, ax = plt.subplots()
+    ax.scatter(x_train, y_train)
+    ax.plot(x_train, model.predict(x_train))
+    plt.savefig(os.path.join(output_dir, 'rep_'+str(experiment_rep)+'.png'))
