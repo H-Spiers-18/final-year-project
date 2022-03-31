@@ -7,7 +7,11 @@ from scipy.stats import wilcoxon
 
 import constants
 
-for path in constants.RQ_ANALYSIS_FOLDERS + constants.SUBJECT_SYSTEM_PATHS:
+# create output folders when this module is imported if they don't exist already
+output_dirs = constants.RQ_ANALYSIS_PATHS + \
+              constants.SUBJECT_SYSTEM_PATHS + \
+              [y for l in constants.SCATTER_PLOT_PATHS.values() for y in l]  # flatten into 1d list
+for path in output_dirs:
     if not os.path.exists(path):
         os.makedirs(path)
 
@@ -158,13 +162,13 @@ def write_mean_min_max(rq):
     Perform analysis of all results csv files and output analysis to csv files
     Parameters
     ----------
-    rq: int - numbers representing the research question results currently being analysed
+    rq: int - number representing the research question results currently being analysed
 
     Returns
     -------
     None
     """
-    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_FOLDERS[rq]
+    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_PATHS[rq]
     mean_min_max_dfs = []
 
     # get the mean, min and max values from each research question results csv file
@@ -185,7 +189,7 @@ def make_box_plots(rq, show_outliers=False):
     Creates a box plot for the data from each research question and writes to file
     Parameters
     ----------
-    rq: int - numbers representing the research question results currently being analysed
+    rq: int - number representing the research question results currently being analysed
     show_outliers: bool - determines whether or not to include outliers in the box plot
 
     Returns
@@ -194,7 +198,7 @@ def make_box_plots(rq, show_outliers=False):
     """
     rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions, y_label = \
         constants.RQ_CSV_NAMES[rq], \
-        constants.RQ_ANALYSIS_FOLDERS[rq], \
+        constants.RQ_ANALYSIS_PATHS[rq], \
         constants.BOX_PLOT_FIELDS[rq], \
         constants.BOX_PLOT_DESCRIPTIONS[rq], \
         constants.Y_AXIS_LABELS[rq]
@@ -213,3 +217,30 @@ def make_box_plots(rq, show_outliers=False):
             ax.set_xticklabels(fields, fontsize=12, rotation=30, horizontalalignment='right')
             plt.savefig(os.path.join(rq_analysis_folder, box_plot_description + subject_system + '_box_plot.png'),
                         bbox_inches='tight')
+
+
+def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error, experiment_rep, subject_system):
+    """
+    Creates and writes a scatter plot containing the source and target data points and linear regression model line
+    Parameters
+    ----------
+    model: sklearn.LinearRegression - Trained transfer model
+    x_train: numpy.ndarray - Source compile-time configuration performance measurements
+    y_train: numpy.ndarray - Target compile-time configuration performance measurements
+    rq: int - Number representing the research question results currently being analysed
+    mape_error: float - Cross-validation MAPE error (not the error between the model and plotted data)
+    experiment_rep: int - Current experiment repetition
+
+    Returns
+    -------
+    None
+    """
+    output_dir = constants.SCATTER_PLOT_PATHS[subject_system.lower()][rq-1]
+    fig, ax = plt.subplots()
+    ax.scatter(x_train, y_train)
+    ax.plot(x_train, model.predict(x_train))
+    ax.set_title('MAPE error: ' + str(mape_error))
+    ax.set_ylabel('Predicted target performance value', fontsize=12)
+    ax.set_xlabel('Measured source performance value', fontsize=12)
+    plt.savefig(os.path.join(output_dir, 'rep_' + str(experiment_rep) + '.png'), bbox_inches='tight')
+    plt.clf()
