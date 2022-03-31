@@ -158,7 +158,7 @@ def write_mean_min_max(rq):
     Perform analysis of all results csv files and output analysis to csv files
     Parameters
     ----------
-    rq: int - numbers representing the research question results currently being analysed
+    rq: int - number representing the research question results currently being analysed
 
     Returns
     -------
@@ -185,7 +185,7 @@ def make_box_plots(rq, show_outliers=False):
     Creates a box plot for the data from each research question and writes to file
     Parameters
     ----------
-    rq: int - numbers representing the research question results currently being analysed
+    rq: int - number representing the research question results currently being analysed
     show_outliers: bool - determines whether or not to include outliers in the box plot
 
     Returns
@@ -213,3 +213,20 @@ def make_box_plots(rq, show_outliers=False):
             ax.set_xticklabels(fields, fontsize=12, rotation=30, horizontalalignment='right')
             plt.savefig(os.path.join(rq_analysis_folder, box_plot_description + subject_system + '_box_plot.png'),
                         bbox_inches='tight')
+
+
+def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error):
+    """
+    Creates and writes a scatter plot containing the source and target data points and linear regression model line
+    Parameters
+    ----------
+    model: sklearn.LinearRegression - Trained transfer model
+    x_train: numpy.ndarray - Source compile-time configuration performance measurements
+    y_train: numpy.ndarray - Target compile-time configuration performance measurements
+    rq: int - Number representing the research question results currently being analysed
+    mape_error: float - Cross-validation MAPE error (not the error between the model and plotted data)
+
+    Returns
+    -------
+    None
+    """
