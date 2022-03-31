@@ -104,6 +104,15 @@ class Learner(ABC):
         else:
             return self.training_time
 
+    def get_model(self):
+        """
+        Returns the current value of model attribute
+        Returns
+        -------
+        model: sklearn model - Current value of self.model
+        """
+        return self.model
+
 
 class PredictorLearner(Learner):
     """Class for training and using a model for predicting the performance values for run-time configurations using a
