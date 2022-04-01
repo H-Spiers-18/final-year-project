@@ -9,7 +9,7 @@ import constants
 
 # create output folders when this module is imported if they don't exist already
 output_dirs = constants.RQ_ANALYSIS_PATHS + \
-              constants.SUBJECT_SYSTEM_PATHS + \
+              list(constants.SUBJECT_SYSTEM_PATHS.values()) + \
               [y for l in constants.SCATTER_PLOT_PATHS.values() for y in l]  # flatten into 1d list
 for path in output_dirs:
     if not os.path.exists(path):
@@ -80,7 +80,7 @@ def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
     -------
     None
     """
-    csv_filename, output_dir = constants.RQ_CSV_NAMES[rq-1], constants.SUBJECT_SYSTEM_PATHS[rq-1]
+    csv_filename, output_dir = constants.RQ_CSV_NAMES[rq-1], constants.SUBJECT_SYSTEM_PATHS[subject_system]
     csv_path = os.path.join(output_dir, csv_filename)
 
     results.to_csv(csv_path, index=False)
@@ -168,11 +168,11 @@ def write_mean_min_max(rq):
     -------
     None
     """
-    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_PATHS[rq]
+    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq-1], constants.RQ_ANALYSIS_PATHS[rq-1]
     mean_min_max_dfs = []
 
     # get the mean, min and max values from each research question results csv file
-    for subject_system_path in constants.SUBJECT_SYSTEM_PATHS:
+    for subject_system_path in list(constants.SUBJECT_SYSTEM_PATHS.values()):
         results_csv = os.path.join(subject_system_path, rq_csv)
         results = read_results_csv(results_csv)
         mean_min_max_dfs.append(get_mean_and_minmax(results))
@@ -197,14 +197,14 @@ def make_box_plots(rq, show_outliers=False):
     None
     """
     rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions, y_label = \
-        constants.RQ_CSV_NAMES[rq], \
-        constants.RQ_ANALYSIS_PATHS[rq], \
-        constants.BOX_PLOT_FIELDS[rq], \
-        constants.BOX_PLOT_DESCRIPTIONS[rq], \
-        constants.Y_AXIS_LABELS[rq]
+        constants.RQ_CSV_NAMES[rq-1], \
+        constants.RQ_ANALYSIS_PATHS[rq-1], \
+        constants.BOX_PLOT_FIELDS[rq-1], \
+        constants.BOX_PLOT_DESCRIPTIONS[rq-1], \
+        constants.Y_AXIS_LABELS[rq-1]
 
     # loop through each subject system for each box plot
-    for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS):
+    for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS.values()):
         results_csv = os.path.join(subject_system_path, rq_csv)
         results = read_results_csv(results_csv)
 
