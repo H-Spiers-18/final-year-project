@@ -168,7 +168,7 @@ def write_mean_min_max(rq):
     -------
     None
     """
-    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq], constants.RQ_ANALYSIS_PATHS[rq]
+    rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq-1], constants.RQ_ANALYSIS_PATHS[rq-1]
     mean_min_max_dfs = []
 
     # get the mean, min and max values from each research question results csv file
@@ -196,6 +196,7 @@ def make_box_plots(rq, show_outliers=False):
     -------
     None
     """
+    rq -= -1
     rq_csv, rq_analysis_folder, box_plot_fields, box_plot_filename_descriptions, y_label = \
         constants.RQ_CSV_NAMES[rq], \
         constants.RQ_ANALYSIS_PATHS[rq], \
