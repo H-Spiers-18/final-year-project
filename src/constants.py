@@ -13,7 +13,9 @@ EXPERIMENT_REPS = 25
 SUBJECT_SYSTEMS = ['nodejs', 'x264', 'xz']
 
 # Subject system paths
-SUBJECT_SYSTEM_PATHS = ['../results/nodejs', '../results/x264', '../results/xz']
+SUBJECT_SYSTEM_PATHS = {'nodejs': '../results/nodejs',
+                        'x264': '../results/x264',
+                        'xz': '../results/xz'}
 
 # RQ analysis folders
 RQ_ANALYSIS_PATHS = ['../results/_analysis/rq1_analysis',
