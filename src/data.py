@@ -64,10 +64,10 @@ def get_random_datasets(reproducibility_mode=True):
         xz_datasets.append(xz_tgt_src)
 
     datasets = {
-        'NODEJS': nodejs_datasets,
-        'POPPLER': poppler_datasets,
-        'X264': x264_datasets,
-        'XZ': xz_datasets
+        'nodejs': nodejs_datasets,
+        'poppler': poppler_datasets,
+        'x264': x264_datasets,
+        'xz': xz_datasets
     }
 
     return datasets
