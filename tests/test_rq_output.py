@@ -5,9 +5,9 @@ from src.analysis import read_results_csv
 
 
 def test_results_csv_structure():
-    assert os.listdir('../results/nodejs') == ['rq1.csv', 'rq2.csv', 'rq3.csv']
-    assert os.listdir('../results/x264') == ['rq1.csv', 'rq2.csv', 'rq3.csv']
-    assert os.listdir('../results/xz') == ['rq1.csv', 'rq2.csv', 'rq3.csv']
+    """"""
+    for subject_system in constants.SUBJECT_SYSTEMS:
+        os.listdir(constants.SUBJECT_SYSTEM_PATHS[subject_system]) == ['rq1.csv', 'rq2.csv', 'rq3.csv']
     assert os.path.exists('../results/_analysis')
     assert sorted(os.listdir('../results/_analysis/rq1_analysis')) == ['mape_error_optimised_nodejs_box_plot.png',
                                                                        'mape_error_optimised_x264_box_plot.png',
