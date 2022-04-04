@@ -11,6 +11,7 @@ def test_results_structure():
 
 
 def test_rq_csvs_contents():
+    """Checks that the results csv contents are as they should be. Includes checking column names and column lengths"""
     expected_columns = [
         ['mse_accuracy_tgt_no_cv', 'mape_accuracy_tgt_no_cv', 'mse_accuracy_tgt_cv', 'mape_accuracy_tgt_cv',
          'mse_accuracy_trans_no_cv', 'mape_accuracy_trans_no_cv', 'mse_accuracy_trans_cv', 'mape_accuracy_trans_cv'],
@@ -30,6 +31,7 @@ def test_rq_csvs_contents():
          'training_time_trans_20pct_cv', 'training_time_trans_40pct_cv', 'training_time_trans_60pct_cv',
          'training_time_trans_80pct_cv']
         ]
+    # read all results CSVs
     results_csvs = [read_results_csv(os.path.join('../results/', subject_system, rq_csv))
                     for subject_system, rq_csv in zip(constants.SUBJECT_SYSTEMS, constants.RQ_CSV_NAMES)]
     for x in range(len(results_csvs)):
