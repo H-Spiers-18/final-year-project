@@ -1,5 +1,7 @@
 import os
 
+import pandas as pd
+
 import src.constants as constants
 from src.analysis import *
 
@@ -38,4 +40,13 @@ def test_scatter_plot_output():
 
         for subject_system in constants.SUBJECT_SYSTEMS:
             assert sorted(os.listdir(os.path.join(_path, subject_system))) == \
-                   sorted(['rep_'+str(x+1)+'.png' for x in range(constants.EXPERIMENT_REPS)])
+                   sorted(['rep_' + str(x + 1) + '.png' for x in range(constants.EXPERIMENT_REPS)])
+
+
+def test_mean_min_max_output():
+    for rq_analysis_path in constants.RQ_ANALYSIS_PATHS:
+        mean_min_max_csv = pd.read_csv(os.path.join(rq_analysis_path, 'mean_min_max.csv'))
+        assert len(mean_min_max_csv['measurement']) == 9
+        assert all(mean_min_max_csv['measurement'] == ['nodejs mean', 'nodejs min', 'nodejs max',
+                                                       'x264 mean', 'x264 min', 'x264 max',
+                                                       'xz mean', 'xz min', 'xz max'])
