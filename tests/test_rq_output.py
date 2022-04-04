@@ -4,10 +4,10 @@ import src.constants as constants
 from src.analysis import read_results_csv
 
 
-def test_results_csv_structure():
-    """"""
+def test_results_structure():
+    """Tests that the results output structure is as expected"""
     for subject_system in constants.SUBJECT_SYSTEMS:
-        os.listdir(constants.SUBJECT_SYSTEM_PATHS[subject_system]) == ['rq1.csv', 'rq2.csv', 'rq3.csv']
+        assert os.listdir(constants.SUBJECT_SYSTEM_PATHS[subject_system]) == ['rq1.csv', 'rq2.csv', 'rq3.csv']
     assert os.path.exists('../results/_analysis')
     assert sorted(os.listdir('../results/_analysis/rq1_analysis')) == ['mape_error_optimised_nodejs_box_plot.png',
                                                                        'mape_error_optimised_x264_box_plot.png',
