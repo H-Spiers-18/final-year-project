@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
-import src.constants as constants
+import constants as constants
 
 # create output folders when this module is imported if they don't exist already
 output_dirs = constants.RQ_ANALYSIS_PATHS + \
@@ -56,11 +56,13 @@ def get_cliffs_delta(s1, s2):
     if type(s2) != np.ndarray:
         s2 = np.array(s2)
 
+    # for each sample in sample 1, count the number of samples greater than and less than the sample
     less_than_count = greater_than_count = 0
     for x in s1:
         greater_than_count += np.sum(s2 > x)
         less_than_count += np.sum(s2 < x)
 
+    # calculate cliff's delta
     z = abs(less_than_count - greater_than_count) / (len(s1) * len(s2))
     return z
 
@@ -80,7 +82,8 @@ def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
     -------
     None
     """
-    csv_filename, output_dir = constants.RQ_CSV_NAMES[rq-1], constants.SUBJECT_SYSTEM_PATHS[subject_system]
+    # grab what the output filename and output path
+    output_dir, csv_filename = constants.SUBJECT_SYSTEM_PATHS[subject_system], constants.RQ_CSV_NAMES[rq-1]
     csv_path = os.path.join(output_dir, csv_filename)
 
     results.to_csv(csv_path, index=False)
@@ -103,12 +106,13 @@ def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
     None
     """
     with open(csv_path, 'a') as results_file:
+        # if it's RQ1 or 2 then just write the p value and effect size with hyperparameter optimisation
         if rq == 1 or rq == 2:
             results_file.write(
                 '\n' + 'Wilcoxon p value: ' + str(wilcox_p[0]) + '\n' +
                 'Cliff\'s delta: ' + str(cliffs_delta[0]))
-            results_file.close()
 
+        # if it's RQ3 then write p value and effect size both with and without hyperparameter optimisation
         elif rq == 3:
             results_file.write(
                 '\n' + 'Wilcoxon p value CV: ' + str(wilcox_p[0]) + '\n' +
@@ -116,12 +120,13 @@ def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
             results_file.write(
                 '\n' + 'Wilcoxon p value no CV: ' + str(wilcox_p[1]) + '\n' +
                 'Cliff\'s delta no CV: ' + str(cliffs_delta[1]))
-            results_file.close()
+
+        results_file.close()
 
 
 def read_results_csv(csv_path):
     """
-    Read results (without p values) from csv to pandas dataframe
+    Read results (without p values and effect size) from csv into pandas dataframe
     Parameters
     ----------
     csv_path: str - path to the results csv
@@ -168,16 +173,17 @@ def write_mean_min_max(rq):
     -------
     None
     """
+    # get input csv name and output path
     rq_csv, rq_analysis_folder = constants.RQ_CSV_NAMES[rq-1], constants.RQ_ANALYSIS_PATHS[rq-1]
     mean_min_max_dfs = []
 
-    # get the mean, min and max values from each research question results csv file
-    for subject_system_path in list(constants.SUBJECT_SYSTEM_PATHS.values()):
-        results_csv = os.path.join(subject_system_path, rq_csv)
+    # get the mean, min and max values from each results csv file and append them to a list
+    for subject_system in constants.SUBJECT_SYSTEMS:
+        results_csv = os.path.join(constants.SUBJECT_SYSTEM_PATHS[subject_system], rq_csv)
         results = read_results_csv(results_csv)
         mean_min_max_dfs.append(get_mean_and_minmax(results))
 
-    # combine all subject systems' results into a single dataframe
+    # combine all subject systems' mean, min, max into a single dataframe
     out = pd.concat(mean_min_max_dfs, ignore_index=True)
     # label each row with what it represents to enhance readability
     out['measurement'] = constants.MEAN_MIN_MAX_ROW_DESCRIPTIONS
@@ -203,8 +209,9 @@ def make_box_plots(rq, show_outliers=False):
         constants.BOX_PLOT_DESCRIPTIONS[rq-1], \
         constants.Y_AXIS_LABELS[rq-1]
 
-    # loop through each subject system for each box plot
-    for subject_system, subject_system_path in zip(constants.SUBJECT_SYSTEMS, constants.SUBJECT_SYSTEM_PATHS.values()):
+    # loop through each subject system and create box plots for it
+    for subject_system in constants.SUBJECT_SYSTEMS:
+        subject_system_path = constants.SUBJECT_SYSTEM_PATHS[subject_system]
         results_csv = os.path.join(subject_system_path, rq_csv)
         results = read_results_csv(results_csv)
 
