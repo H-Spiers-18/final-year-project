@@ -8,7 +8,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 import numpy as np
 
-import constants
+import src.constants as constants
 
 
 class InvalidAccuracyMeasureException(Exception):
