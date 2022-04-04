@@ -8,30 +8,6 @@ def test_results_structure():
     """Tests that the results output structure is as expected"""
     for subject_system in constants.SUBJECT_SYSTEMS:
         assert os.listdir(constants.SUBJECT_SYSTEM_PATHS[subject_system]) == ['rq1.csv', 'rq2.csv', 'rq3.csv']
-    assert os.path.exists('../results/_analysis')
-    assert sorted(os.listdir('../results/_analysis/rq1_analysis')) == ['mape_error_optimised_nodejs_box_plot.png',
-                                                                       'mape_error_optimised_x264_box_plot.png',
-                                                                       'mape_error_optimised_xz_box_plot.png',
-                                                                       'mape_error_unoptimised_nodejs_box_plot.png',
-                                                                       'mape_error_unoptimised_x264_box_plot.png',
-                                                                       'mape_error_unoptimised_xz_box_plot.png',
-                                                                       'mean_min_max.csv',
-                                                                       'transfer_model_scatter_plots']
-    assert sorted(os.listdir('../results/_analysis/rq2_analysis')) == ['mape_error_predictor_model_nodejs_box_plot.png',
-                                                                       'mape_error_predictor_model_x264_box_plot.png',
-                                                                       'mape_error_predictor_model_xz_box_plot.png',
-                                                                       'mape_error_transfer_model_nodejs_box_plot.png',
-                                                                       'mape_error_transfer_model_x264_box_plot.png',
-                                                                       'mape_error_transfer_model_xz_box_plot.png',
-                                                                       'mean_min_max.csv',
-                                                                       'transfer_model_scatter_plots']
-    assert sorted(os.listdir('../results/_analysis/rq3_analysis')) == ['mean_min_max.csv',
-                                                                       'training_time_predictor_model_nodejs_box_plot.png',
-                                                                       'training_time_predictor_model_x264_box_plot.png',
-                                                                       'training_time_predictor_model_xz_box_plot.png',
-                                                                       'training_time_transfer_model_nodejs_box_plot.png',
-                                                                       'training_time_transfer_model_x264_box_plot.png',
-                                                                       'training_time_transfer_model_xz_box_plot.png']
 
 
 def test_rq_csvs_contents():

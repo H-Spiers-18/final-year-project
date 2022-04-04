@@ -8,6 +8,7 @@ from src.analysis import *
 
 def test_output_structure():
     """Check that the analysis output file structure is as expected"""
+    assert os.path.exists('../results/_analysis')
     assert sorted(os.listdir('../results/_analysis/rq1_analysis')) == ['mape_error_optimised_nodejs_box_plot.png',
                                                                        'mape_error_optimised_x264_box_plot.png',
                                                                        'mape_error_optimised_xz_box_plot.png',
