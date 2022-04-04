@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
-import constants
+import src.constants as constants
 
 # create output folders when this module is imported if they don't exist already
 output_dirs = constants.RQ_ANALYSIS_PATHS + \
