@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import wilcoxon
 
-import src.constants as constants
+import constants as constants
 
 # create output folders when this module is imported if they don't exist already
 output_dirs = constants.RQ_ANALYSIS_PATHS + \
@@ -211,7 +211,7 @@ def make_box_plots(rq, show_outliers=False):
 
     # loop through each subject system and create box plots for it
     for subject_system in constants.SUBJECT_SYSTEMS:
-        subject_system_path = constants.SUBJECT_SYSTEMS[subject_system]
+        subject_system_path = constants.SUBJECT_SYSTEM_PATHS[subject_system]
         results_csv = os.path.join(subject_system_path, rq_csv)
         results = read_results_csv(results_csv)
 
