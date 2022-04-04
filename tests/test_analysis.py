@@ -38,10 +38,13 @@ def test_scatter_plot_output():
     """Check that the scatter plot output file structure is as expected. Includes checking that plots for all subject
     systems are present and that there is a plot for each experiment repetition"""
     scatter_plot_paths = constants.RQ_ANALYSIS_PATHS[:2]  # only check RQ1 and 2 since 3 has no scatter plots
+
     for rq_analysis_path in scatter_plot_paths:
         _path = os.path.join(rq_analysis_path, 'transfer_model_scatter_plots')
+        # check that scatter plots have been created for all subject systems
         assert sorted(os.listdir(_path)) == constants.SUBJECT_SYSTEMS
 
+        # check that a scatter plot has been created for each experiment repetition
         for subject_system in constants.SUBJECT_SYSTEMS:
             assert sorted(os.listdir(os.path.join(_path, subject_system))) == \
                    sorted(['rep_' + str(x + 1) + '.png' for x in range(constants.EXPERIMENT_REPS)])
