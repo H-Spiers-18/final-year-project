@@ -226,7 +226,8 @@ def make_box_plots(rq, show_outliers=False):
                         bbox_inches='tight')
 
 
-def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error, experiment_rep, subject_system):
+def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error,
+                                     experiment_rep, subject_system, dataset_size=''):
     """
     Creates and writes a scatter plot containing the source and target data points and linear regression model line
     Parameters
@@ -249,5 +250,6 @@ def make_transfer_model_scatter_plot(model, x_train, y_train, rq, mape_error, ex
     ax.set_title('MAPE error: ' + str(mape_error))
     ax.set_ylabel('Predicted target performance value', fontsize=12)
     ax.set_xlabel('Measured source performance value', fontsize=12)
-    plt.savefig(os.path.join(output_dir, 'rep_' + str(experiment_rep) + '.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'rep_' + str(experiment_rep) + '_' + str(dataset_size) + '.png'),
+                bbox_inches='tight')
     plt.clf()
