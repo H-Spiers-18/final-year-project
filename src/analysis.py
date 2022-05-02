@@ -97,8 +97,7 @@ def add_effect_size_to_csv(results, csv_path, rq):
     Add Wilcoxon's p value and cliff's delta as a footer to the given csv file
     Parameters
     ----------
-    wilcox_p: list - results' wilcoxon p value(s) (with and optionally without cross validation)
-    cliffs_delta: float - results' cliff's delta value(s) (with and optionally without cross validation)
+    results: pd.DataFrame - DataFrame containing recorded results
     csv_path: str - path to the results csv file
     rq: int - which research question the csv belongs to
 
