@@ -33,6 +33,9 @@ SCATTER_PLOT_PATHS = {'nodejs': ['../results/_analysis/rq1_analysis/transfer_mod
 # RQ csv names
 RQ_CSV_NAMES = ['rq1.csv', 'rq2.csv', 'rq3.csv']
 
+# Statistical test csv names
+STAT_TEST_CSV_NAMES = ['rq1_stat_test.csv', 'rq2_stat_test.csv', 'rq3_stat_test.csv']
+
 # Results column names
 RESULTS_DATAFRAME_COLUMN_NAMES = [
         ['mse_accuracy_tgt_no_cv', 'mape_accuracy_tgt_no_cv', 'mse_accuracy_tgt_cv', 'mape_accuracy_tgt_cv',
