@@ -2,7 +2,6 @@
 
 Each subdirectory is named after a software system :
 - the *nodejs* directory contains the data measured on *nodeJS*
-- the *poppler* directory contains the data measured onn *poppler*
 - the *x264* directory contains the data measured on *x264*
 - the *xz* directory contains the data measured on *xz*
 
