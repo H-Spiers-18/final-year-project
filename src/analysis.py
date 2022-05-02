@@ -87,11 +87,11 @@ def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
     csv_path = os.path.join(output_dir, csv_filename)
 
     results.to_csv(csv_path, index=False)
-    add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq)
+    add_effect_size_to_csv(results, rq)
     print('Output written to', csv_path, '\n')
 
 
-def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
+def add_effect_size_to_csv(results, rq):
     """
     Add Wilcoxon's p value and cliff's delta as a footer to the given csv file
     Parameters
@@ -105,23 +105,31 @@ def add_effect_size_to_csv(wilcox_p, cliffs_delta, csv_path, rq):
     -------
     None
     """
-    with open(csv_path, 'a') as results_file:
-        # if it's RQ1 or 2 then just write the p value and effect size with hyperparameter optimisation
-        if rq == 1 or rq == 2:
-            results_file.write(
-                '\n' + 'Wilcoxon p value: ' + str(wilcox_p[0]) + '\n' +
-                'Cliff\'s delta: ' + str(cliffs_delta[0]))
+    csv_path = constants.STAT_TEST_CSV_NAMES[rq-1]
+    wilcox_p = cliffs_delta = 0
+    out = ''
+    dataset_size_table = [['', '20%', '40%', '60%', '80%'],
+                          ['20%', '', '', '', ''],
+                          ['40%', '', '', '', ''],
+                          ['60%', '', '', '', ''],
+                          ['80%', '', '', '', '']]
+    if rq == 1:
+        wilcox_p = get_wilcoxon_p_value(results['mape_accuracy_tgt_cv'], results['mse_accuracy_trans_cv'])
+        cliffs_delta = get_cliffs_delta(results['mape_accuracy_tgt_cv'], results['mse_accuracy_trans_cv'])
+        out = 'Wilcoxon p value: ' + str(wilcox_p) + '\n' + 'Cliff\'s delta: ' + str(cliffs_delta)
 
-        # if it's RQ3 then write p value and effect size both with and without hyperparameter optimisation
-        elif rq == 3:
-            results_file.write(
-                '\n' + 'Wilcoxon p value CV: ' + str(wilcox_p[0]) + '\n' +
-                'Cliff\'s delta CV: ' + str(cliffs_delta[0]))
-            results_file.write(
-                '\n' + 'Wilcoxon p value no CV: ' + str(wilcox_p[1]) + '\n' +
-                'Cliff\'s delta no CV: ' + str(cliffs_delta[1]))
+    elif rq == 2:
+        out =  'Wilcoxon p value: ' + '\n' + dataset_size_table + '\n\n' + \
+               'Cliff\'s delta: ' + '\n' + dataset_size_table
 
-        results_file.close()
+    elif rq == 3:
+        out = 'Wilcoxon p value: ' + '\n' + dataset_size_table + '\n\n' + \
+              'Cliff\'s delta: ' + '\n' + dataset_size_table
+
+    with open(csv_path, 'w') as results_file:
+        results_file.write(out)
+
+    results_file.close()
 
 
 def read_results_csv(csv_path):
