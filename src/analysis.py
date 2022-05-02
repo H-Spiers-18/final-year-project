@@ -158,8 +158,42 @@ def add_effect_size_to_csv(results, csv_path, rq):
             writer.writerows(dataset_size_cliffs_delta_table)
 
         elif rq == 3:
-            out = 'Wilcoxon p value: ' + '\n' + dataset_size_table + '\n\n' + \
-                  'Cliff\'s delta: ' + '\n' + dataset_size_table
+            # find all columns which can be used to run each of the statistical tests
+            predictor_no_cv_comparison_cols = [x for x in results.columns
+                                               if x.startswith('training_time_pred') and x.endswith('no_cv')]
+            transfer_no_cv_comparison_cols = [x for x in results.columns
+                                              if x.startswith('training_time_trans') and x.endswith('no_cv')]
+            predictor_cv_comparison_cols = [x for x in results.columns
+                                            if x.startswith('training_time_pred') and not x.endswith('no_cv')]
+            transfer_cv_comparison_cols = [x for x in results.columns
+                                           if x.startswith('training_time_trans') and not x.endswith('no_cv')]
+
+            transfer_pred_cv_p_val = get_wilcoxon_p_value(results[predictor_cv_comparison_cols[3]],
+                                                          results[transfer_cv_comparison_cols[3]])
+            transfer_pred_cv_cliffs_delta = get_cliffs_delta(results[predictor_cv_comparison_cols[3]],
+                                                             results[transfer_cv_comparison_cols[3]])
+
+            # compare the training time of the transfer model for each combination of training set size
+            for x in range(len(transfer_no_cv_comparison_cols)):
+                for y in range(len(predictor_no_cv_comparison_cols)):
+                    col1 = transfer_no_cv_comparison_cols[x]
+                    col2 = transfer_no_cv_comparison_cols[y]
+                    if transfer_no_cv_comparison_cols[x] != transfer_no_cv_comparison_cols[y]:
+                        dataset_size_p_val_table[x+1][y+1] = get_wilcoxon_p_value(results[col1], results[col2])
+                        dataset_size_cliffs_delta_table[x+1][y+1] = get_cliffs_delta(results[col1], results[col2])
+
+            # append statistical test results to results csv
+            writer = csv.writer(results_file)
+
+            results_file.write('\n\n' + 'Wilcoxon p value for transfer vs predictor w/ optimisation: ' +
+                               str(transfer_pred_cv_p_val) + '\n')
+            results_file.write('\n\n' + 'Cliff\'s delta for transfer vs predictor w/ optimisation: ' +
+                               str(transfer_pred_cv_cliffs_delta) + '\n')
+
+            results_file.write('\n\n' + 'Wilcoxon p value for transfer dataset sizes: \n')
+            writer.writerows(dataset_size_p_val_table)
+            results_file.write('\n\n' + 'Cliff\'s delta for transfer dataset sizes: \n')
+            writer.writerows(dataset_size_cliffs_delta_table)
 
     results_file.close()
 
