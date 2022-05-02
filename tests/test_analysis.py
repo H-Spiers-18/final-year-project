@@ -44,11 +44,6 @@ def test_scatter_plot_output():
         # check that scatter plots have been created for all subject systems
         assert sorted(os.listdir(_path)) == constants.SUBJECT_SYSTEMS
 
-        # check that a scatter plot has been created for each experiment repetition
-        for subject_system in constants.SUBJECT_SYSTEMS:
-            assert sorted(os.listdir(os.path.join(_path, subject_system))) == \
-                   sorted(['rep_' + str(x + 1) + '.png' for x in range(constants.EXPERIMENT_REPS)])
-
 
 def test_mean_min_max_output():
     """Check that the mean min max file output is as expected. Includes checking that the mean, min and max values are
