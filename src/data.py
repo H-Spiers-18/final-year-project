@@ -15,7 +15,6 @@ class NFPropertyBoundaryIndexes(Enum):
     """Used to access the non-functional property boundary indexes for each subject system's dataset
     (i.e. which column number does the configuration options stop and the non-functional property measurements begin)"""
     NODEJS = constants.NODEJS_NF_BOUNDARY
-    POPPLER = constants.POPPLER_NF_BOUNDARY
     X264 = constants.X264_NF_BOUNDARY
     XZ = constants.XZ_NF_BOUNDARY
 
@@ -29,7 +28,6 @@ def get_random_datasets(reproducibility_mode=True):
     reproducibility_mode: bool - Whether or not to set a constant seed to select the same dataset each time
     """
     nodejs_datasets = []
-    poppler_datasets = []
     x264_datasets = []
     xz_datasets = []
     # set random number generator seed for experiment reproducibility
@@ -44,11 +42,6 @@ def get_random_datasets(reproducibility_mode=True):
                                          'nodejs')
                                 for ctime_dir in os.listdir(constants.NODEJS_PATH)
                                 if os.path.isdir(os.path.join(constants.NODEJS_PATH, ctime_dir))], 2))
-        poppler_tgt_src = \
-            tuple(random.sample([Dataset(os.path.join(constants.POPPLER_PATH, ctime_dir, constants.POPPLER_CSV_PATH),
-                                         'poppler')
-                                for ctime_dir in os.listdir(constants.POPPLER_PATH)
-                                if os.path.isdir(os.path.join(constants.POPPLER_PATH, ctime_dir))], 2))
         x264_tgt_src = \
             tuple(random.sample([Dataset(os.path.join(constants.X264_PATH, ctime_dir, constants.X264_CSV_PATH), 'x264')
                                 for ctime_dir in os.listdir(constants.X264_PATH)
@@ -59,13 +52,11 @@ def get_random_datasets(reproducibility_mode=True):
                                 if os.path.isdir(os.path.join(constants.XZ_PATH, ctime_dir))], 2))
 
         nodejs_datasets.append(nodejs_tgt_src)
-        poppler_datasets.append(poppler_tgt_src)
         x264_datasets.append(x264_tgt_src)
         xz_datasets.append(xz_tgt_src)
 
     datasets = {
         'nodejs': nodejs_datasets,
-        'poppler': poppler_datasets,
         'x264': x264_datasets,
         'xz': xz_datasets
     }
@@ -154,7 +145,7 @@ class Dataset:
             - crop the data so that only the configuration options remain in the feature set
         Parameters
         ----------
-        subject_system: str - says which subject system the dataset belongs to. value can be nodejs, poppler, x264 or xz
+        subject_system: str - says which subject system the dataset belongs to. value can be nodejs, x264 or xz
 
         Returns
         -------
@@ -175,7 +166,7 @@ class Dataset:
         Gets and returns the feature vectors and measured performance values for all samples in our dataset
         Parameters
         ----------
-        subject_system: str - says which subject system the dataset belongs to. value can be nodejs, poppler, x264 or xz
+        subject_system: str - says which subject system the dataset belongs to. value can be nodejs, x264 or xz
 
         Returns
         -------
