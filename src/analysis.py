@@ -1,4 +1,5 @@
 import os
+import csv
 
 import numpy as np
 import pandas as pd
@@ -87,11 +88,11 @@ def save_results(results, subject_system, wilcox_p, cliffs_delta, rq):
     csv_path = os.path.join(output_dir, csv_filename)
 
     results.to_csv(csv_path, index=False)
-    add_effect_size_to_csv(results, rq)
+    add_effect_size_to_csv(results, csv_path, rq)
     print('Output written to', csv_path, '\n')
 
 
-def add_effect_size_to_csv(results, rq):
+def add_effect_size_to_csv(results, csv_path, rq):
     """
     Add Wilcoxon's p value and cliff's delta as a footer to the given csv file
     Parameters
@@ -105,29 +106,60 @@ def add_effect_size_to_csv(results, rq):
     -------
     None
     """
-    csv_path = constants.STAT_TEST_CSV_NAMES[rq-1]
-    wilcox_p = cliffs_delta = 0
-    out = ''
-    dataset_size_table = [['', '20%', '40%', '60%', '80%'],
-                          ['20%', '', '', '', ''],
-                          ['40%', '', '', '', ''],
-                          ['60%', '', '', '', ''],
-                          ['80%', '', '', '', '']]
-    if rq == 1:
-        wilcox_p = get_wilcoxon_p_value(results['mape_accuracy_tgt_cv'], results['mse_accuracy_trans_cv'])
-        cliffs_delta = get_cliffs_delta(results['mape_accuracy_tgt_cv'], results['mse_accuracy_trans_cv'])
-        out = 'Wilcoxon p value: ' + str(wilcox_p) + '\n' + 'Cliff\'s delta: ' + str(cliffs_delta)
+    dataset_size_p_val_table = [['', '20%', '40%', '60%', '80%'],
+                                ['20%', '', '', '', ''],
+                                ['40%', '', '', '', ''],
+                                ['60%', '', '', '', ''],
+                                ['80%', '', '', '', '']]
+    dataset_size_cliffs_delta_table = [['', '20%', '40%', '60%', '80%'],
+                                       ['20%', '', '', '', ''],
+                                       ['40%', '', '', '', ''],
+                                       ['60%', '', '', '', ''],
+                                       ['80%', '', '', '', '']]
+    transfer_predictor_p_val = []
+    transfer_predictor_cliffs_delta = []
 
-    elif rq == 2:
-        out =  'Wilcoxon p value: ' + '\n' + dataset_size_table + '\n\n' + \
-               'Cliff\'s delta: ' + '\n' + dataset_size_table
+    with open(csv_path, 'a', newline='') as results_file:
+        if rq == 1:
+            wilcox_p = get_wilcoxon_p_value(results['mape_accuracy_tgt_cv'], results['mse_accuracy_trans_cv'])
+            cliffs_delta = get_cliffs_delta(results['mape_accuracy_tgt_cv'], results['mse_accuracy_trans_cv'])
+            results_file.write('Wilcoxon p value: ' + str(wilcox_p) + '\n' + 'Cliff\'s delta: ' + str(cliffs_delta))
 
-    elif rq == 3:
-        out = 'Wilcoxon p value: ' + '\n' + dataset_size_table + '\n\n' + \
-              'Cliff\'s delta: ' + '\n' + dataset_size_table
+        elif rq == 2:
+            # find all columns which can be used to run each of the 2 statistical tests
+            predictor_comparison_cols = [x for x in results.columns if x.startswith('mape_accuracy_pred')]
+            transfer_comparison_cols = [x for x in results.columns if x.startswith('mape_accuracy_trans')]
 
-    with open(csv_path, 'w') as results_file:
-        results_file.write(out)
+            # compare the accuracy of the transfer vs predictor approach for each training set size
+            for pred, trans in zip(predictor_comparison_cols, transfer_comparison_cols):
+                transfer_predictor_p_val.append(get_wilcoxon_p_value(results[pred], results[trans]))
+                transfer_predictor_cliffs_delta.append(get_cliffs_delta(results[pred], results[trans]))
+
+            # compare the accuracy of the transfer model for each combination of training set size
+            for x in range(len(transfer_comparison_cols)):
+                for y in range(len(transfer_comparison_cols)):
+                    col1 = transfer_comparison_cols[x]
+                    col2 = transfer_comparison_cols[y]
+                    if transfer_comparison_cols[x] != transfer_comparison_cols[y]:
+                        dataset_size_p_val_table[x+1][y+1] = get_wilcoxon_p_value(results[col1], results[col2])
+                        dataset_size_cliffs_delta_table[x+1][y+1] = get_cliffs_delta(results[col1], results[col2])
+
+            # append statistical test results to results csv
+            writer = csv.writer(results_file)
+
+            results_file.write('\n\n' + 'Wilcoxon p value for transfer vs predictor: \n')
+            writer.writerow(transfer_predictor_p_val)
+            results_file.write('\n\n' + 'Cliff\'s delta for transfer vs predictor: \n')
+            writer.writerow(transfer_predictor_cliffs_delta)
+
+            results_file.write('\n\n' + 'Wilcoxon p value for transfer dataset sizes: \n')
+            writer.writerows(dataset_size_p_val_table)
+            results_file.write('\n\n' + 'Cliff\'s delta for transfer dataset sizes: \n')
+            writer.writerows(dataset_size_cliffs_delta_table)
+
+        elif rq == 3:
+            out = 'Wilcoxon p value: ' + '\n' + dataset_size_table + '\n\n' + \
+                  'Cliff\'s delta: ' + '\n' + dataset_size_table
 
     results_file.close()
 
