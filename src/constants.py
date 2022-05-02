@@ -76,19 +76,16 @@ Y_AXIS_LABELS = ['MAPE error (%)', 'MAPE error (%)', 'Training time (ms)']
 
 # Dataset folder paths
 NODEJS_PATH = '../dataset/nodejs'
-POPPLER_PATH = '../dataset/poppler'
 X264_PATH = '../dataset/x264'
 XZ_PATH = '../dataset/xz'
 
 # Dataset csv paths
 NODEJS_CSV_PATH = 'domain.csv'
-POPPLER_CSV_PATH = 'apache_camel.csv'
 X264_CSV_PATH = 'original_videos_Animation_480P_Animation_480P-087e.csv'
 XZ_CSV_PATH = 'mozilla.csv'
 
 # Index for each dataset where the configuration options end and non-functional properties begin
 NODEJS_NF_BOUNDARY = -1
-POPPLER_NF_BOUNDARY = -2
 X264_NF_BOUNDARY = -5
 XZ_NF_BOUNDARY = -2
 
